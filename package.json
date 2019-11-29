@@ -1,0 +1,14 @@
+{
+  "name": "gulp-file-observer",
+  "version": "1.0.0",
+  "description": "For Testing",
+  "scripts": {
+    "test": "gulp watch",
+    "gulp": "gulp"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "gulp": "^4.0.2"
+  }
+}
