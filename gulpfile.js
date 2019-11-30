@@ -7,7 +7,7 @@ function runTests(cb) {
         if (err) {
           console.error(err);
           // if (stderr) {console.log(`stderr: ${stderr}`);}
-          // if (stdout) {console.log(`stdout: ${stdout}`);}
+          if (stdout) {console.log(`stdout: ${stdout}`);}
         } else {
           if (stderr) {console.log(`stderr: ${stderr}`);}
           if (stdout) {console.log(`stdout: ${stdout}`);}
