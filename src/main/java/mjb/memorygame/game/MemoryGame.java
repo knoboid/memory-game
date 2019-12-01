@@ -42,6 +42,31 @@ public class MemoryGame {
         this(size, 1);
     }
 
+    public MemoryGame(List<Integer> cards, List<Integer> moves) {
+        this(cards, moves, 1);
+    }
+
+    /**
+     * Recreates a game using a given set of cards, a given set of moves and
+     * the first player
+     * @param cards
+     * @param moves
+     * @param firstPlayer - an integer whose only valid values are 1 or 2
+     */
+    public MemoryGame(List<Integer> cards, List<Integer> moves, int firstPlayer) {
+        setSize(cards.size());
+        setFirstPlayer(firstPlayer);
+        setCurrentPlayer(firstPlayer);
+        this.cards = new MemoryGameCards(cards);
+        this.board = new MemoryGameBoard(this.cards);
+        for(int move : moves) {
+            this.revealCard(getCurrentPlayer(), move);
+            if (isNewTurn()) {
+                completeTurn();
+            }
+        }
+    }   
+
     public MemoryGame(int size, int firstPlayer) {
         setSize(size);
         // Check firstPlayer is 1 or 2: Better still, always default to 1.
@@ -139,6 +164,10 @@ public class MemoryGame {
         return cards;
     }
 
+    public List<Integer> getCardsAsList() {
+        return getCards().asList();
+    }
+
     public void setCards(List<Integer> cards) {
         this.cards.setCards(cards);
     }
@@ -173,6 +202,10 @@ public class MemoryGame {
     }
 
     public List<Integer> getMoves() {
+        return moves;
+    }
+
+    public List<Integer> getMovesAsList() {
         return moves;
     }
 
@@ -211,8 +244,4 @@ public class MemoryGame {
     private int getCard(int index) {
         return getCards().getCard(index);
     }
-
-
-
-
 }

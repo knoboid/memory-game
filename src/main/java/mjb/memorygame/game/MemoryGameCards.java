@@ -14,7 +14,7 @@ public class MemoryGameCards {
     }
 
     public MemoryGameCards(List<Integer> cards) {
-        this.cards = cards;
+        setCards(cards);
     }
 
     private void newCards(int size) {

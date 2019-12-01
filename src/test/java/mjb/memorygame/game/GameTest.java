@@ -169,6 +169,21 @@ public class GameTest {
         assertEquals(10, memoryGame.getBoard().hiddenCount());
 
         memoryGame.revealCard(2, 4);
+        
+        /**
+         * Create new game using the cards and the moves from the current game.
+         */
+        MemoryGame memoryGame2 = 
+            new MemoryGame(memoryGame.getCardsAsList(), memoryGame.getMovesAsList());
+        
+        /**
+         * Check that the boards are the same size, and that they contain the sasme items.
+         */
+        assertEquals(memoryGame.getBoard().getSize(), memoryGame2.getBoard().getSize());
+        for(int i=0; i<memoryGame.getBoard().getSize(); i++) {
+            assertEquals(memoryGame.getBoard().get(i), memoryGame2.getBoard().get(i));
+        }
+
         memoryGame.revealCard(2, 5);
         memoryGame.completeTurn();
         assertScore(memoryGame, 1, 5);
