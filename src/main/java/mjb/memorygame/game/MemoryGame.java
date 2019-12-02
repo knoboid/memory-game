@@ -176,8 +176,8 @@ public class MemoryGame {
         return board;
     }
 
-    public void setBoardState(List<Integer> board) {
-        this.board.setBoard(board);
+    public List<Integer> getBoardAsList() {
+        return getBoard().asList();
     }
 
     public int getNextPlayer() {

@@ -12,9 +12,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import mjb.memorygame.entities.Player;
 import mjb.memorygame.entities.Seek;
+import mjb.memorygame.game.MemoryGame;
+import mjb.memorygame.entities.Cards;
 import mjb.memorygame.entities.Game;
 import mjb.memorygame.repositories.PlayerRepository;
 import mjb.memorygame.repositories.SeekRepository;
+import mjb.memorygame.repositories.CardsRepository;
 import mjb.memorygame.repositories.GameRepository;
 
 @RestController
@@ -28,6 +31,9 @@ public class SeekController {
 
 	@Autowired
 	private GameRepository gameRepository;
+
+	@Autowired
+	private CardsRepository cardsRepository;
 	
 	/**
 	 * Allows a player to seek a game with other users.
@@ -37,10 +43,10 @@ public class SeekController {
 	 * @return
 	 */
     @RequestMapping(value = "/seek", method = RequestMethod.POST)
-	@ResponseBody Game postAddSeek(@RequestParam Long playerId, @RequestParam int cards) {
+	@ResponseBody Game postAddSeek(@RequestParam Long playerId, @RequestParam int cardCount) {
 		Player seeker = playerRepository.findById(playerId).get();
-		Seek seek = new Seek(seeker, cards);
-		Game game = gameRepository.save((new Game(seeker, cards)));
+		Seek seek = new Seek(seeker, cardCount);
+		Game game = gameRepository.save((new Game(seeker, cardCount)));
 		seek.setGame(game);
 		seek = seekRepository.save(seek);
 		return game;
@@ -58,9 +64,14 @@ public class SeekController {
 		Seek seek = seekRepository.findById(seekId).get();
 		Player seeker = playerRepository.findById(playerId).get();
 		seek.setAccepter(seeker);
-		seek.getGame().setPlayer2(seeker);
+		Game game = seek.getGame();
+		MemoryGame memoryGame = new MemoryGame(game.getCardCount());
+		Cards cards = new Cards(game.getId(), memoryGame.getCardsAsList());
+		cardsRepository.save(cards);
+		game.setPlayer2(seeker);
+		game.setBoard(memoryGame.getBoardAsList());
 		seek = seekRepository.save(seek);
-		return seek.getGame();
+		return game;
 	}
 
 }

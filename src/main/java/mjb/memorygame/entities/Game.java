@@ -26,7 +26,7 @@ public class Game {
     private Player player2;
 
     @Column
-    private int cards;
+    private int cardCount;
 
     @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
     List<Move> moves;
@@ -36,9 +36,9 @@ public class Game {
 
     public Game() {}
 
-    public Game(Player player1, int cards) {
+    public Game(Player player1, int cardCount) {
         setPlayer1(player1);
-        setCards(cards);
+        setCardCount(cardCount);
 
     }
 
@@ -54,12 +54,12 @@ public class Game {
         this.id = id;
     }
 
-    public int getCards() {
-        return cards;
+    public int getCardCount() {
+        return cardCount;
     }
 
-    public void setCards(int cards) {
-        this.cards = cards;
+    public void setCardCount(int cardCount) {
+        this.cardCount = cardCount;
     }
 
     public Player getPlayer1() {

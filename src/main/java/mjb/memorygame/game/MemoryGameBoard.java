@@ -54,7 +54,7 @@ public class MemoryGameBoard {
         return board.get(index);
     }
 
-    public List<Integer> getBoard() {
+    public List<Integer> asList() {
         return board;
     }
 
