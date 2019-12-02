@@ -34,6 +34,12 @@ public class GameController {
         moves.add(new Move(cardIndex));
         gameRepository.save(game);
 		return moves;
+    }
+    
+    @RequestMapping(value = "/game", method = RequestMethod.GET)
+	Game getViewGame(@RequestParam long id) {
+        Game game = gameRepository.findById(id).get();
+		return game;
 	}
 
 }
