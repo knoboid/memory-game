@@ -13,11 +13,11 @@ public class Move {
     private long id;
 
     @Column
-    private long cardIndex;
+    private int cardIndex;
 
     public Move() {}
     
-    public Move(long cardIndex) {
+    public Move(int cardIndex) {
         setCardIndex(cardIndex);
     }
 
@@ -29,11 +29,11 @@ public class Move {
         this.id = id;
     }
 
-    public long getCardIndex() {
+    public int getCardIndex() {
         return cardIndex;
     }
 
-    public void setCardIndex(long cardIndex) {
+    public void setCardIndex(int cardIndex) {
         this.cardIndex = cardIndex;
     }
     

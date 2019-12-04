@@ -1,6 +1,7 @@
 package mjb.memorygame.entities;
 
 import java.util.List;
+import java.util.ArrayList;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -26,23 +27,35 @@ public class Game {
     private Player player2;
 
     @Column
-    private int cardCount;
+    private int cardPairCount;
 
     @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
     List<Move> moves;
 
+    @Column
+    private int score1;
+
+    @Column
+    private int score2;
+
     @Transient
     List<Integer> board;
 
-    public Game() {}
+    @Column
+    private boolean lock;
+
+    public Game() {
+        setLock(false);
+    }
 
     public Game(Player player1, int cardCount) {
-        setPlayer1(player1);
-        setCardCount(cardCount);
+        this(player1);
+        setCardPairCount(cardCount);
 
     }
 
     public Game(Player player1) {
+        this();
         setPlayer1(player1);
     }
 
@@ -54,12 +67,12 @@ public class Game {
         this.id = id;
     }
 
-    public int getCardCount() {
-        return cardCount;
+    public int getCardPairCount() {
+        return cardPairCount;
     }
 
-    public void setCardCount(int cardCount) {
-        this.cardCount = cardCount;
+    public void setCardPairCount(int cardPairCount) {
+        this.cardPairCount = cardPairCount;
     }
 
     public Player getPlayer1() {
@@ -78,12 +91,44 @@ public class Game {
         this.player2 = player2;
     }
 
-    public List<Move>  getMoves() {
+    public List<Move> getMoves() {
         return moves;
     }
 
     public void setMoves(List<Move> moves) {
         this.moves = moves;
+    }
+
+    public int getScore1() {
+        return score1;
+    }
+
+    public void setScore1(int score1) {
+        this.score1 = score1;
+    }
+
+    public int getScore2() {
+        return score2;
+    }
+
+    public void setScore2(int score2) {
+        this.score2 = score2;
+    }
+
+    public List<Integer> asList() {
+        List<Integer> movesAsList = new ArrayList<Integer>();
+        for(Move move : getMoves()) {
+            movesAsList.add(move.getCardIndex());
+        }
+        return movesAsList;
+    }
+
+    public void setMovesFromList(List<Integer> movesList) {
+        List<Move> moves = new ArrayList<Move>();
+        for(Integer cardIndex : movesList) {
+            moves.add(new Move(cardIndex));
+        }
+        setMoves(moves);
     }
 
     public List<Integer> getBoard() {
@@ -94,4 +139,11 @@ public class Game {
         this.board = board;
     }
 
+    public boolean getLock() {
+        return lock;
+    }
+
+    public void setLock(boolean lock) {
+        this.lock = lock;
+    }
 }

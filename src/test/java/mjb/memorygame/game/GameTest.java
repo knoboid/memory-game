@@ -37,9 +37,9 @@ public class GameTest {
         return true;
     }
 
-    private static List<Integer> generateReverseSequencedCards(int size) {
+    private static List<Integer> generateReverseSequencedCards(int cardPairCount) {
         List<Integer> list = new ArrayList<Integer>();
-        for (int i=size; i > 0; i--) {
+        for (int i=cardPairCount; i > 0; i--) {
             list.add(i);
             list.add(i);
         }
@@ -52,13 +52,18 @@ public class GameTest {
     }
 
     @Test
-    public void shouldCreateNewGame() {
-        int size = 10;
-// Initialize game.
-        MemoryGame memoryGame = new MemoryGame(size);
-        assertEquals(size, memoryGame.getSize());
-        assertEquals(size * 2, memoryGame.getCards().getSize());
-        assertEquals(size * 2, memoryGame.getBoard().getSize());
+    public void shouldCreateNewGame()
+            throws MemoryGameWrongPlayerException, MemoryGameCardIsFaceUpException, MemoryGameLockedException,
+            MemoryGameCardOutOfRangeException {
+        int cardPairCount = 10;
+        
+        /***
+         * Initialize the game.
+         */
+        MemoryGame memoryGame = new MemoryGame(cardPairCount);
+        assertEquals(cardPairCount, memoryGame.getPairCount());
+        assertEquals(cardPairCount * 2, memoryGame.getCards().getSize());
+        assertEquals(cardPairCount * 2, memoryGame.getBoard().getSize());
         assertEquals(1, memoryGame.getCurrentPlayer());
         assertFalse(
             "The cards are not still in sequence", 
@@ -66,14 +71,16 @@ public class GameTest {
         );
         assertTrue("Each card appears twice", eachCardAppearsTwice(memoryGame.getCards().asList()));
         // Put the cards in a known order so that we can play a game.
-        memoryGame.setCards(generateReverseSequencedCards(size));
-        // System.out.println(memoryGame.getCards());
-        // System.out.println(memoryGame.getBoard());
+        memoryGame.setCards(generateReverseSequencedCards(cardPairCount));
+
         assertEquals(1, memoryGame.getCurrentPlayer());
-// MOVE 0 p1
+
+        /**
+         * MOVE 0 p1
+         */
         // Make invalid move.
         try {
-            memoryGame.revealCard(1, size*2);
+            memoryGame.revealCard(1, cardPairCount*2);
             assertTrue("expecting MemoryGameCardOutOfRangeException", false);
         } catch (MemoryGameCardOutOfRangeException e) {
             // ignore
@@ -104,7 +111,10 @@ public class GameTest {
         assertEquals(1, memoryGame.getMoveCount());
         assertScore(memoryGame, 0, 0);
         cardIndex = 1;
-// MOVE 1 p1
+
+        /**
+         * MOVE 1 p1
+         */
         memoryGame.revealCard(1, cardIndex);
 
         // System.out.println(memoryGame.getBoard());
@@ -131,9 +141,15 @@ public class GameTest {
         } catch (MemoryGameWrongPlayerException e) {
             // ignore
         }
-// MOVE 2 p1
+
+        /**
+         * MOVE 2 p1
+         */
         memoryGame.revealCard(1, 2);
-// MOVE 3 p1
+
+        /**
+         * MOVE 3 p1
+         */
         memoryGame.revealCard(1, 4);
         assertScore(memoryGame, 1, 0);
         assertEquals(1, memoryGame.getCurrentPlayer());
@@ -142,14 +158,18 @@ public class GameTest {
         assertScore(memoryGame, 1, 0);
         assertEquals(2, memoryGame.getCurrentPlayer());
 
-// MOVES 4 and 5 p2
+        /**
+         * MOVES 4 and 5 p2
+         */
         memoryGame.revealCard(2, 2);
         memoryGame.revealCard(2, 3);
         memoryGame.completeTurn();
         assertScore(memoryGame, 1, 1);
         assertEquals(16, memoryGame.getBoard().hiddenCount());
 
-// MOVES 6 and 7 p2
+        /**
+         * MOVES 6 and 7 p2
+         **/ 
         memoryGame.revealCard(2, 8);
         memoryGame.revealCard(2, 9);
         memoryGame.completeTurn();
@@ -174,7 +194,7 @@ public class GameTest {
          * Create new game using the cards and the moves from the current game.
          */
         MemoryGame memoryGame2 = 
-            new MemoryGame(memoryGame.getCardsAsList(), memoryGame.getMovesAsList());
+            new MemoryGame(memoryGame.getCardsAsList(), memoryGame.getMovesAsList(), memoryGame.getLock());
         
         /**
          * Check that the boards are the same size, and that they contain the sasme items.
@@ -203,6 +223,7 @@ public class GameTest {
 
         memoryGame.revealCard(1, 14);
         memoryGame.revealCard(1, 15);
+        assertScore(memoryGame, 2, 5);
         memoryGame.completeTurn();
         assertScore(memoryGame, 3, 5);
         assertEquals(4, memoryGame.getBoard().hiddenCount());

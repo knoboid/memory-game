@@ -8,6 +8,10 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 
+/** 
+ * This Entity is not necessary.
+ * We can use the Game entity to determine seeks.
+ */
 @Entity
 public class Seek {
 
@@ -34,11 +38,6 @@ public class Seek {
         setSeeker(seeker);
         setCards(cards);
     }
-    
-    // public Seek(long seekerId, int cards) {
-    //     setSeekerId(seekerId);
-    //     setCards(cards);
-    // }
 
     public long getId() {
         return id;
@@ -47,22 +46,6 @@ public class Seek {
     public void setId(long id) {
         this.id = id;
     }
-
-    // public long getSeekerId() {
-    //     return seekerId;
-    // }
-
-    // public void setSeekerId(long seekerId) {
-    //     this.seekerId = seekerId;
-    // }
-
-    // public long getAccepterId() {
-    //     return accepterId;
-    // }
-
-    // public void setAccepterId(long accepterId) {
-    //     this.accepterId = accepterId;
-    // }
 
     public int getCards() {
         return cards;

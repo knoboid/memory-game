@@ -1,6 +1,6 @@
 package mjb.memorygame.game.exceptions;
 
-public class MemoryGameCardIsFaceUpException extends RuntimeException {
+public class MemoryGameCardIsFaceUpException extends Exception {
 
     private static final long serialVersionUID = 1L;
 

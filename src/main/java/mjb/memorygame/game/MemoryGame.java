@@ -28,7 +28,7 @@ import mjb.memorygame.game.exceptions.MemoryGameWrongPlayerException;
  */
 public class MemoryGame {
 
-    private int size;
+    private int pairCount;
     private MemoryGameCards cards;
     private MemoryGameBoard board;
     private int firstPlayer;
@@ -38,66 +38,78 @@ public class MemoryGame {
     private List<Integer> moves = new ArrayList<Integer>();
     private boolean lock;
     
-    public MemoryGame(int size) {
-        this(size, 1);
+    public MemoryGame(int pairCount) {
+        this(pairCount, 1);
     }
 
-    public MemoryGame(List<Integer> cards, List<Integer> moves) {
-        this(cards, moves, 1);
+    public MemoryGame(List<Integer> cards, List<Integer> moves, boolean lock)
+            throws MemoryGameWrongPlayerException, MemoryGameCardIsFaceUpException, MemoryGameLockedException,
+            MemoryGameCardOutOfRangeException {
+        this(cards, moves, lock, 1);
     }
 
     /**
-     * Recreates a game using a given set of cards, a given set of moves and
-     * the first player
+     * Recreates a game using a given set of cards, a given set of moves and the
+     * first player
+     * 
      * @param cards
      * @param moves
      * @param firstPlayer - an integer whose only valid values are 1 or 2
+     * @throws MemoryGameCardIsFaceUpException
+     * @throws MemoryGameWrongPlayerException
+     * @throws MemoryGameLockedException
+     * @throws MemoryGameCardOutOfRangeException
      */
-    public MemoryGame(List<Integer> cards, List<Integer> moves, int firstPlayer) {
-        setSize(cards.size());
+    public MemoryGame(List<Integer> cards, List<Integer> moves, boolean lock, int firstPlayer) throws MemoryGameWrongPlayerException,
+            MemoryGameCardIsFaceUpException, MemoryGameLockedException, MemoryGameCardOutOfRangeException {
+        setPairCount(cards.size());
         setFirstPlayer(firstPlayer);
         setCurrentPlayer(firstPlayer);
         this.cards = new MemoryGameCards(cards);
         this.board = new MemoryGameBoard(this.cards);
-        for(int move : moves) {
-            this.revealCard(getCurrentPlayer(), move);
-            if (isNewTurn()) {
+
+        for(int i=0; i < moves.size(); i++) {
+            this.revealCard(getCurrentPlayer(), moves.get(i));
+            if (isNewTurn() && i != (moves.size() - 1)) {
                 completeTurn();
             }
         }
+        if (isNewTurn() && !lock && moves.size() > 0) {
+            completeTurn();
+        }
     }   
 
-    public MemoryGame(int size, int firstPlayer) {
-        setSize(size);
+    public MemoryGame(int pairCount, int firstPlayer) {
+        setPairCount(pairCount);
         // Check firstPlayer is 1 or 2: Better still, always default to 1.
         setFirstPlayer(firstPlayer);
         setCurrentPlayer(firstPlayer);
-        this.cards = new MemoryGameCards(size);
+        this.cards = new MemoryGameCards(pairCount);
         this.board = new MemoryGameBoard(this.cards);
     }
 
-    public void revealCard(int player, int index) {
+    public void revealCard(int player, int index) throws MemoryGameWrongPlayerException, MemoryGameCardIsFaceUpException, MemoryGameLockedException, MemoryGameCardOutOfRangeException {
         checkLock();
         checkValidPlayer(player);
         int cardState = checkRangeThenReturnCardValue(index);
         doMove(index, cardState);
     }
 
-    private void checkLock() {
-        if (lock) {
+    private void checkLock() throws MemoryGameLockedException {
+        if (getLock()) {
             String message = "Game locked. Don't forget to finish each by calling completeMove()";
             throw new MemoryGameLockedException(message);
         }
     }
 
-    private void checkValidPlayer(int player) {
+    private void checkValidPlayer(int player) throws MemoryGameWrongPlayerException {
         if (player != getCurrentPlayer()) {
             String message = String.format("It is not player %d's turn!", player);
             throw new MemoryGameWrongPlayerException(message);
         }
     }
 
-    private int checkRangeThenReturnCardValue(int index) {
+    private int checkRangeThenReturnCardValue(int index) throws MemoryGameCardOutOfRangeException {
         try{
             return getBoard().get(index);
         } catch (IndexOutOfBoundsException e){
@@ -105,7 +117,7 @@ public class MemoryGame {
         }
     }
 
-    private void doMove(int index, int cardState) {
+    private void doMove(int index, int cardState) throws MemoryGameCardIsFaceUpException {
         if (cardState != 0) {
             throw new MemoryGameCardIsFaceUpException("The card is already face up!");
         }
@@ -113,7 +125,7 @@ public class MemoryGame {
             getBoard().reveal(index);
             this.addMove(index);
             if (isNewTurn()) {
-                lock = true;
+                setLock(true);
             } 
         }
     }
@@ -146,18 +158,18 @@ public class MemoryGame {
 
     public void completeTurn() {
         checkScore(getMoveCount()-1);
-        lock = false;
+        setLock(false);
     }
     
     /************************
     *  Getters And Setters  *
     ************************/
-    public int getSize() {
-        return size;
+    public int getPairCount() {
+        return pairCount;
     }
 
-    public void setSize(int size) {
-        this.size = size;
+    public void setPairCount(int pairCount) {
+        this.pairCount = pairCount;
     }
 
     public MemoryGameCards getCards() {
@@ -244,4 +256,13 @@ public class MemoryGame {
     private int getCard(int index) {
         return getCards().getCard(index);
     }
+
+    public boolean getLock() {
+        return lock;
+    }
+
+    public void setLock(boolean lock) {
+        this.lock = lock;
+    }
+
 }

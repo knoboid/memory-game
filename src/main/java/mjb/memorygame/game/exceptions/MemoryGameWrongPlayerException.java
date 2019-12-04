@@ -1,6 +1,6 @@
 package mjb.memorygame.game.exceptions;
 
-public class MemoryGameWrongPlayerException extends RuntimeException {
+public class MemoryGameWrongPlayerException extends Exception {
     
     private static final long serialVersionUID = 1L;
 

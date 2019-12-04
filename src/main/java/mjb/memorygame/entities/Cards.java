@@ -4,12 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 
@@ -47,6 +44,14 @@ public class Cards {
 
     public void setCards(List<Card> cards) {
         this.cards = cards;
+    }
+
+    public List<Integer> asList() {
+        List<Integer> cardsAsList = new ArrayList<Integer>();
+        for(Card card : getCards()) {
+            cardsAsList.add(card.getValue());
+        }
+        return cardsAsList;
     }
 
 }

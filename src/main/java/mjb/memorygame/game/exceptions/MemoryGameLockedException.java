@@ -1,7 +1,7 @@
 package mjb.memorygame.game.exceptions;
 
 
-public class MemoryGameLockedException extends RuntimeException {
+public class MemoryGameLockedException extends Exception {
 
     private static final long serialVersionUID = 1L;
 

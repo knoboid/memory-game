@@ -1,6 +1,6 @@
 package mjb.memorygame.game.exceptions;
 
-public class MemoryGameCardOutOfRangeException extends IndexOutOfBoundsException {
+public class MemoryGameCardOutOfRangeException extends Exception {
 
     private static final long serialVersionUID = 1L;
 
