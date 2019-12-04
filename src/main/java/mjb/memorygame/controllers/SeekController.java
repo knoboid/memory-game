@@ -44,7 +44,7 @@ public class SeekController {
 	 * @param cards
 	 * @return
 	 */
-    @RequestMapping(value = "/seek", method = RequestMethod.POST)
+    @RequestMapping(value = "/api/seek", method = RequestMethod.POST)
 	@ResponseBody
 	ResponseEntity<?> postAddSeek(@RequestParam Long playerId, @RequestParam int cardPairCount) {
 		Player seeker = playerRepository.findById(playerId).get();
@@ -56,14 +56,14 @@ public class SeekController {
 
 	}
 
-	@RequestMapping(value = "/seeks", method = RequestMethod.GET)
+	@RequestMapping(value = "/api/seeks", method = RequestMethod.GET)
 	ResponseEntity<?> getViewSeeks() {
 		List<Seek> seeks = new ArrayList<Seek>();
 		seeks = seekRepository.findAll();
 		return new ResponseEntity<>(seeks, HttpStatus.OK);
 	}
 
-    @RequestMapping(value = "/accept", method = RequestMethod.POST)
+    @RequestMapping(value = "/api/accept", method = RequestMethod.POST)
 	@ResponseBody
 	ResponseEntity<?> postAddAccept(@RequestParam Long seekId, @RequestParam Long playerId) {
 		Seek seek = seekRepository.findById(seekId).get();

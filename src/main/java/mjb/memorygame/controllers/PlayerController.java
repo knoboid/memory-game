@@ -22,7 +22,7 @@ public class PlayerController {
 	@Autowired
 	private PlayerRepository playerRepository;
 
-	@RequestMapping(value = "/player", method = RequestMethod.POST)
+	@RequestMapping(value = "/api/player", method = RequestMethod.POST)
 	@ResponseBody
 	ResponseEntity<?> createPlayer2(@RequestParam String name) {
 		Player player = new Player(name);
@@ -36,7 +36,7 @@ public class PlayerController {
 		return new ResponseEntity<>(player, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/players", method = RequestMethod.GET)
+	@RequestMapping(value = "/api/players", method = RequestMethod.GET)
 	ResponseEntity<?> getPlayers() {
 		List<Player> players = new ArrayList<Player>();
 		players = playerRepository.findAll();

@@ -33,3 +33,5 @@ build/
 ### nodejs
 node_modules/
 
+### JS bundle
+src/main/resources/static/build/

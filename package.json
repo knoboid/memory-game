@@ -2,13 +2,26 @@
   "name": "gulp-file-observer",
   "version": "1.0.0",
   "description": "For Testing",
+  "dependencies": {
+    "react": "^16.5.2",
+    "react-dom": "^16.5.2",
+    "rest": "^1.3.1"
+  },
   "scripts": {
     "test": "gulp watch",
-    "gulp": "gulp"
+    "gulp": "gulp",
+    "watch": "webpack --watch -d",
+    "build": "webpack"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "gulp": "^4.0.2"
+    "gulp": "^4.0.2",
+    "@babel/core": "^7.1.0",
+    "@babel/preset-env": "^7.1.0",
+    "@babel/preset-react": "^7.0.0",
+    "babel-loader": "^8.0.2",
+    "webpack": "^4.19.1",
+    "webpack-cli": "^3.1.0"
   }
 }

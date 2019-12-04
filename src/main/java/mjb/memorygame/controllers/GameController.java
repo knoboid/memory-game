@@ -38,7 +38,7 @@ public class GameController {
 
     
 
-    @RequestMapping(value = "/move", method = RequestMethod.POST)
+    @RequestMapping(value = "/api/move", method = RequestMethod.POST)
     @ResponseBody
     ResponseEntity<?> postAddMove(@RequestParam long gameId, @RequestParam long playerId, @RequestParam int cardIndex) {
         Game game = gameRepository.findById(gameId).get();
@@ -72,7 +72,7 @@ public class GameController {
         return new ResponseEntity<>(game, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/game", method = RequestMethod.GET)
+    @RequestMapping(value = "/api/game", method = RequestMethod.GET)
     ResponseEntity<?> getViewGame(@RequestParam long id) {
         Game game = gameRepository.findById(id).get();
         List<Move> moves = game.getMoves();
@@ -87,13 +87,13 @@ public class GameController {
 		return new ResponseEntity<>(game, HttpStatus.OK);
     }
     
-    @RequestMapping(value = "/cards", method = RequestMethod.GET)
+    @RequestMapping(value = "/api/cards", method = RequestMethod.GET)
 	ResponseEntity<?> getViewCards(@RequestParam Long gameId) {
         Cards cards = cardsRepository.findById(gameId).get();
         return new ResponseEntity<>(cards, HttpStatus.OK);
     }
     
-    @RequestMapping(value = "/completeMove", method = RequestMethod.POST)
+    @RequestMapping(value = "/api/completeMove", method = RequestMethod.POST)
     @ResponseBody
     ResponseEntity<?> postCompleteMove(@RequestParam long gameId) {
         Game game = gameRepository.findById(gameId).get();
