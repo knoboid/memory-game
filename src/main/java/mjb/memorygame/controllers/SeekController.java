@@ -13,14 +13,18 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import mjb.memorygame.entities.Player;
+import mjb.memorygame.entities.RestError;
 import mjb.memorygame.entities.Seek;
 import mjb.memorygame.game.MemoryGame;
 import mjb.memorygame.entities.Cards;
 import mjb.memorygame.entities.Game;
 import mjb.memorygame.repositories.PlayerRepository;
 import mjb.memorygame.repositories.SeekRepository;
+import mjb.memorygame.services.SeekService;
 import mjb.memorygame.repositories.CardsRepository;
 import mjb.memorygame.repositories.GameRepository;
+import mjb.memorygame.events.GamesEventHandler;
+import mjb.memorygame.events.SeeksEventHandler;
 
 @RestController
 public class SeekController {
@@ -36,6 +40,15 @@ public class SeekController {
 
 	@Autowired
 	private CardsRepository cardsRepository;
+
+	@Autowired
+	private SeekService seekService;
+
+	@Autowired
+	private SeeksEventHandler seeksEventHandler;
+
+	@Autowired
+	private GamesEventHandler gamesEventHandler;
 	
 	/**
 	 * Usedd to seek a game with other players.
@@ -52,8 +65,8 @@ public class SeekController {
 		Game game = gameRepository.save((new Game(seeker, cardPairCount)));
 		seek.setGame(game);
 		seek = seekRepository.save(seek);
+		seeksEventHandler.newSeek(seek);
 		return new ResponseEntity<>(game, HttpStatus.OK);
-
 	}
 
 	@RequestMapping(value = "/api/seeks", method = RequestMethod.GET)
@@ -63,10 +76,32 @@ public class SeekController {
 		return new ResponseEntity<>(seeks, HttpStatus.OK);
 	}
 
+	@RequestMapping(value = "/api/seek", method = RequestMethod.GET)
+	ResponseEntity<?> getViewSeek(@RequestParam Long id) {
+		Seek seek = seekRepository.findById(id).get();
+		return new ResponseEntity<>(seek, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/api/seeksbyseekerid", method = RequestMethod.GET)
+	ResponseEntity<?> getViewSeeksBySeeker(@RequestParam long seekerId) {
+		List<Seek> seeks = seekRepository.findBySeekerId(seekerId);
+		return new ResponseEntity<>(seeks, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/api/seeksbyseekerid", method = RequestMethod.DELETE)
+	ResponseEntity<?> deleteDeleteSeeksBySeeker(@RequestParam long seekerId) {
+		seekRepository.deleteBySeekerId(seekerId);
+		return new ResponseEntity<>(null, HttpStatus.OK);
+	}
+
     @RequestMapping(value = "/api/accept", method = RequestMethod.POST)
 	@ResponseBody
 	ResponseEntity<?> postAddAccept(@RequestParam Long seekId, @RequestParam Long playerId) {
 		Seek seek = seekRepository.findById(seekId).get();
+		if (seekService.isSeekAccepted(seek)) {
+			String msg = "This seek has already been accepted.";
+            return new ResponseEntity<>(new RestError(String.format(msg)), HttpStatus.OK);
+		}
 		Player seeker = playerRepository.findById(playerId).get();
 		seek.setAccepter(seeker);
 		Game game = seek.getGame();
@@ -76,6 +111,7 @@ public class SeekController {
 		game.setPlayer2(seeker);
 		game.setBoard(memoryGame.getBoardAsList());
 		seek = seekRepository.save(seek);
+		seeksEventHandler.newAccept(seek);
 		return new ResponseEntity<>(game, HttpStatus.OK);
 	}
 

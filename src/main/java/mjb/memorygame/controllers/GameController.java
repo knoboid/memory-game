@@ -15,6 +15,7 @@ import mjb.memorygame.entities.Cards;
 import mjb.memorygame.entities.Game;
 import mjb.memorygame.entities.Move;
 import mjb.memorygame.entities.RestError;
+import mjb.memorygame.events.GamesEventHandler;
 import mjb.memorygame.game.MemoryGame;
 import mjb.memorygame.game.exceptions.MemoryGameCardIsFaceUpException;
 import mjb.memorygame.game.exceptions.MemoryGameCardOutOfRangeException;
@@ -22,13 +23,13 @@ import mjb.memorygame.game.exceptions.MemoryGameLockedException;
 import mjb.memorygame.game.exceptions.MemoryGameWrongPlayerException;
 import mjb.memorygame.repositories.CardsRepository;
 import mjb.memorygame.repositories.GameRepository;
-import mjb.memorygame.services.GameServiceImpl;
+import mjb.memorygame.services.GameService;
 
 @RestController
 public class GameController {
 
     @Autowired
-    private GameServiceImpl gameService;
+    private GameService gameService;
 
     @Autowired
     private CardsRepository cardsRepository;
@@ -36,8 +37,9 @@ public class GameController {
     @Autowired
     private GameRepository gameRepository;
 
+    @Autowired
+	private GamesEventHandler gamesEventHandler;
     
-
     @RequestMapping(value = "/api/move", method = RequestMethod.POST)
     @ResponseBody
     ResponseEntity<?> postAddMove(@RequestParam long gameId, @RequestParam long playerId, @RequestParam int cardIndex) {
@@ -45,29 +47,31 @@ public class GameController {
         int player = gameService.getPlayerNumber(game, playerId);
         if (player == 0) {
             String msg = "%d: no such playerId for the game %d";
-            return new ResponseEntity<>(new RestError(String.format(msg, playerId, gameId)), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new RestError(String.format(msg, playerId, gameId)), HttpStatus.OK);
         }
 
         MemoryGame memoryGame = gameService.loadFromStorage(game);
         if (memoryGame == null) {
-            return new ResponseEntity<>(new RestError("Wrong Player"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new RestError("Wrong Player"), HttpStatus.OK);
         }
 
         try {
             memoryGame.revealCard(player, cardIndex);
         } catch (MemoryGameWrongPlayerException e) {
-            return new ResponseEntity<>(new RestError("Wrong Player"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new RestError("Wrong Player"), HttpStatus.OK);
         } catch (MemoryGameCardIsFaceUpException e) {
-            return new ResponseEntity<>(new RestError("Card is face up"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new RestError("Card is face up"), HttpStatus.OK);
         } catch (MemoryGameLockedException e) {
-            return new ResponseEntity<>(new RestError("The game is locked"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new RestError("The game is locked"), HttpStatus.OK);
         } catch (MemoryGameCardOutOfRangeException e) {
-            return new ResponseEntity<>(new RestError("Card out of range"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new RestError("Card out of range"), HttpStatus.OK);
         }
 
         gameService.populateEntityFromGame(game, memoryGame);
         game.getMoves().add(new Move(cardIndex));
         gameRepository.save(game);
+
+        gamesEventHandler.newMove(game);
 
         return new ResponseEntity<>(game, HttpStatus.OK);
     }
@@ -78,7 +82,7 @@ public class GameController {
         List<Move> moves = game.getMoves();
         MemoryGame memoryGame = gameService.loadFromStorage(game);
         if (memoryGame == null) {
-            return new ResponseEntity<>(new RestError("Wrong Player"), HttpStatus.BAD_REQUEST);            
+            return new ResponseEntity<>(new RestError("Wrong Player"), HttpStatus.OK);            
         }
 
         gameService.populateEntityFromGame(game, memoryGame);
@@ -93,19 +97,21 @@ public class GameController {
         return new ResponseEntity<>(cards, HttpStatus.OK);
     }
     
-    @RequestMapping(value = "/api/completeMove", method = RequestMethod.POST)
+    @RequestMapping(value = "/api/completeTurn", method = RequestMethod.POST)
     @ResponseBody
-    ResponseEntity<?> postCompleteMove(@RequestParam long gameId) {
+    ResponseEntity<?> postCompleteTurn(@RequestParam long gameId) {
         Game game = gameRepository.findById(gameId).get();
         MemoryGame memoryGame = gameService.loadFromStorage(game);
 
         if (memoryGame == null) {
-            return new ResponseEntity<>(new RestError("Wrong Player"), HttpStatus.BAD_REQUEST);            
+            return new ResponseEntity<>(new RestError("Wrong Player"), HttpStatus.OK);            
         }
 
         memoryGame.completeTurn();
         gameService.populateEntityFromGame(game, memoryGame);
         gameRepository.save(game);
+
+        gamesEventHandler.newMove(game);
 
         return new ResponseEntity<>(game, HttpStatus.OK);
     }

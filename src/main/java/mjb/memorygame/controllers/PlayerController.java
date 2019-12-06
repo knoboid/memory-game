@@ -24,14 +24,14 @@ public class PlayerController {
 
 	@RequestMapping(value = "/api/player", method = RequestMethod.POST)
 	@ResponseBody
-	ResponseEntity<?> createPlayer2(@RequestParam String name) {
+	ResponseEntity<?> createPlayer(@RequestParam String name) {
 		Player player = new Player(name);
 		try {
 			player = playerRepository.save(player);
 		} 
 		catch (RuntimeException e) {
 			String msg = "Could not create player: %s.";
-			return new ResponseEntity<>(new RestError(String.format(msg, name)), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(new RestError(String.format(msg, name)), HttpStatus.OK);
 		}
 		return new ResponseEntity<>(player, HttpStatus.OK);
 	}
@@ -42,4 +42,11 @@ public class PlayerController {
 		players = playerRepository.findAll();
 		return new ResponseEntity<>(players, HttpStatus.OK);
 	}
+
+	@RequestMapping(value = "/api/playersbyname", method = RequestMethod.GET)
+	ResponseEntity<?> getPlayersByName(@RequestParam String name) {
+		List<Player> players = playerRepository.findByName(name);
+		return new ResponseEntity<>(players, HttpStatus.OK);
+	}
+
 }
