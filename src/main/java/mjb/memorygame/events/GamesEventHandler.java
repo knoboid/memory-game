@@ -16,11 +16,6 @@ public class GamesEventHandler {
 		this.websocket = websocket;
 	}
 
-	public void newGame(Game game) {
-		this.websocket.convertAndSend(
-            WebSocketConfiguration.MESSAGE_PREFIX + "/new", getPath(game));
-    }
-
 	public void newMove(Game game) {
 		this.websocket.convertAndSend(
             WebSocketConfiguration.MESSAGE_PREFIX + "/newMove", getPath(game));
