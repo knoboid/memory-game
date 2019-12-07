@@ -5,10 +5,13 @@ import { getGame, postMove, completeTurn } from '../../rest/rest.js';
 
 import stompClient from '../../websocket.js';
 
+import './board.css';
+
 class Board extends Component {
 
 	constructor(props) {
 		super(props);
+		this.state = {gate: true};
         this.cardClicked = this.cardClicked.bind(this);
         this.state = {game: {board: []}, loaded: false};
         this.turnCard = this.turnCard.bind(this);
@@ -67,9 +70,12 @@ class Board extends Component {
 
 	render() {
         const { game } = this.state;
-		
-		const style = {float: 'left'};
 		const columns = Math.floor(Math.sqrt(game.cardPairCount * 2));
+
+		if (this.state.gate && game.gameOver) {
+			this.props.onGameOver();
+			this.setState({gate: false})
+		}
 		
 		return (
 			<div>
@@ -86,7 +92,7 @@ class Board extends Component {
                     {
                         game.board.map((card, i) => {
                             return (
-								<div key={i} style={ (i % columns === 0) ? {float: 'left', clear: 'left'} : {float: 'left'}}>
+								<div className='cardDiv' key={i} style={ (i % columns === 0) ? {clear: 'left'} : {}}>
                                     <Card index={i} card={card} onClick={this.cardClicked}/>
                                 </div>
                             )

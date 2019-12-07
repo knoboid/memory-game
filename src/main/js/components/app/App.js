@@ -1,6 +1,6 @@
 const React = require('react');
 const ReactDOM = require('react-dom');
-import { getSeek, postSeek, postAccept } from '../../rest/rest.js';
+import { getSeek, postSeek, postAccept, getGame } from '../../rest/rest.js';
 
 import Player from '../player/Player.js';
 import Seeks from '../seeks/Seeks.js';
@@ -22,6 +22,7 @@ class App extends React.Component {
 		this.onSeekSubmitted = this.onSeekSubmitted.bind(this);
 		this.acceptedSeek = this.acceptedSeek.bind(this);
 		this.quitGame = this.quitGame.bind(this);
+		this.gameOver = this.gameOver.bind(this);
 		this.alert = this.alert.bind(this);
 	}
 
@@ -90,6 +91,12 @@ class App extends React.Component {
 		}, 2500);
 	}
 
+	gameOver() {
+		getGame( response => {
+			this.setState({game: response.entity});
+		}, this.state.game.id);
+	}
+
 	quitGame() {
 		this.setState({game: null});
 	}
@@ -138,12 +145,21 @@ class App extends React.Component {
 				{
 					showGameComponent ? (
 						<div>
-							<div>Game </div>
+							{
+								this.state.game.gameOver ? (
+									<div>Game over. {this.state.game.winner.name} is the winner.</div> 
+								)
+								:
+								(
+									<div>Game</div>
+								)
+							}
 							<Board 
 								gameId={this.state.game.id} 
 								playerId={this.state.currentPlayer.id} 
 								alert={this.alert} 
 								onQuit={this.quitGame}
+								onGameOver={this.gameOver}
 							/>
 						</div>
 					) : ''

@@ -47,6 +47,12 @@ public class Game {
     @Transient
     private boolean successfulTurn;
 
+    @Transient
+    private boolean gameOver;
+
+    @Transient
+    private Player winner;
+
     public Game() {
         setLock(false);
     }
@@ -156,6 +162,22 @@ public class Game {
 
     public void setSuccessfulTurn(boolean successfulTurn) {
         this.successfulTurn = successfulTurn;
+    }
+
+    public boolean isGameOver() {
+        return gameOver;
+    }
+
+    public void setGameOver(boolean gameOver) {
+        this.gameOver = gameOver;
+    }
+
+    public Player getWinner() {
+        return winner;
+    }
+
+    public void setWinner(Player winner) {
+        this.winner = winner;
     }
 
 }
