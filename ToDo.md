@@ -6,4 +6,5 @@
 * Make the ui nicer - a tacky card table look perhaps?
 * Round cards, bigger, transform when the card is turned.
 * Whose turn is it.
+* Prevent a player from accepting their own seeks.
 

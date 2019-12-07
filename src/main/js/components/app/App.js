@@ -8,6 +8,8 @@ import Board from '../board/Board.js';
 
 import stompClient from '../../websocket.js';
 
+import './app.css';
+
 class App extends React.Component {
 
 	constructor(props) {
