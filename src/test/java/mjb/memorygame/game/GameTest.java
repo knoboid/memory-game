@@ -75,6 +75,7 @@ public class GameTest {
 
         assertEquals(1, memoryGame.getCurrentPlayer());
         assertFalse(memoryGame.isSuccessfulTurn());
+        assertFalse("Game is not over.", memoryGame.isGameOver());
         /**
          * MOVE 0 p1
          */
@@ -271,11 +272,14 @@ public class GameTest {
         assertScore(memoryGame, 4, 5);
         assertEquals(2, memoryGame.getBoard().hiddenCount());
 
+        assertFalse("Game is not over.", memoryGame.isGameOver());
         memoryGame.revealCard(1, 6);
+        assertFalse("Game is not over.", memoryGame.isGameOver());
         memoryGame.revealCard(1, 7);
+        assertFalse("Game is not over.", memoryGame.isGameOver());
         memoryGame.completeTurn();
+        assertTrue("Game is not over.", memoryGame.isGameOver());
         assertScore(memoryGame, 5, 5);
         assertEquals(0, memoryGame.getBoard().hiddenCount());
-
     }
 }

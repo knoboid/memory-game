@@ -38,6 +38,7 @@ public class MemoryGame {
     private List<Integer> moves = new ArrayList<Integer>();
     private boolean lock;
     private boolean successfulTurn;
+    private boolean gameOver;
     
     public MemoryGame(int pairCount) {
         this(pairCount, 1);
@@ -68,6 +69,8 @@ public class MemoryGame {
         setCurrentPlayer(firstPlayer);
         this.cards = new MemoryGameCards(cards);
         this.board = new MemoryGameBoard(this.cards);
+        setSuccessfulTurn(false);
+        setGameOver(false);
 
         for(int i=0; i < moves.size(); i++) {
             this.revealCard(getCurrentPlayer(), moves.get(i));
@@ -87,6 +90,8 @@ public class MemoryGame {
         setCurrentPlayer(firstPlayer);
         this.cards = new MemoryGameCards(pairCount);
         this.board = new MemoryGameBoard(this.cards);
+        setSuccessfulTurn(false);
+        setGameOver(false);
     }
 
     public void revealCard(int player, int cardIndex) throws MemoryGameWrongPlayerException, MemoryGameCardIsFaceUpException, MemoryGameLockedException, MemoryGameCardOutOfRangeException {
@@ -172,6 +177,9 @@ public class MemoryGame {
         checkScore(getMoveCount()-1);
         setLock(false);
         setSuccessfulTurn(false);
+        if (getBoard().hiddenCount() == 0) {
+            setGameOver(true);
+        }
     }
     
     /************************
@@ -284,6 +292,14 @@ public class MemoryGame {
 
     public void setSuccessfulTurn(boolean successfulTurn) {
         this.successfulTurn = successfulTurn;
+    }
+
+    public boolean isGameOver() {
+        return gameOver;
+    }
+
+    public void setGameOver(boolean gameOver) {
+        this.gameOver = gameOver;
     }
 
 }
