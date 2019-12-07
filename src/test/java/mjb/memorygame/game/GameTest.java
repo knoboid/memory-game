@@ -181,6 +181,8 @@ public class GameTest {
         assertScore(memoryGame, 1, 1);
         assertEquals(16, memoryGame.getBoard().hiddenCount());
 
+        assertEquals(0, memoryGame.getWinner());
+
         /**
          * MOVES 6 and 7 p2
          **/ 
@@ -263,23 +265,37 @@ public class GameTest {
         assertFalse(memoryGame.isSuccessfulTurn());
         assertScore(memoryGame, 3, 5);
         assertEquals(4, memoryGame.getBoard().hiddenCount());
-
         assertFalse(memoryGame.isSuccessfulTurn());
 
         memoryGame.revealCard(1, 16);
-        memoryGame.revealCard(1, 17);
+        assertFalse(memoryGame.isSuccessfulTurn());
+        memoryGame.revealCard(1, 6);
+        assertScore(memoryGame, 3, 5);
+        assertFalse(memoryGame.isSuccessfulTurn());
         memoryGame.completeTurn();
-        assertScore(memoryGame, 4, 5);
+        assertFalse(memoryGame.isSuccessfulTurn());
+        assertScore(memoryGame, 3, 5);
+        assertEquals(4, memoryGame.getBoard().hiddenCount());
+        assertFalse(memoryGame.isSuccessfulTurn());
+
+        memoryGame.revealCard(2, 16);
+        memoryGame.revealCard(2, 17);
+        memoryGame.completeTurn();
+        assertScore(memoryGame, 3, 6);
         assertEquals(2, memoryGame.getBoard().hiddenCount());
 
+        assertEquals(0, memoryGame.getWinner());
+
         assertFalse("Game is not over.", memoryGame.isGameOver());
-        memoryGame.revealCard(1, 6);
+        memoryGame.revealCard(2, 6);
         assertFalse("Game is not over.", memoryGame.isGameOver());
-        memoryGame.revealCard(1, 7);
+        memoryGame.revealCard(2, 7);
         assertFalse("Game is not over.", memoryGame.isGameOver());
+        assertEquals(0, memoryGame.getWinner());
         memoryGame.completeTurn();
-        assertTrue("Game is not over.", memoryGame.isGameOver());
-        assertScore(memoryGame, 5, 5);
+        assertEquals(2, memoryGame.getWinner());
+        assertTrue("Game is over.", memoryGame.isGameOver());
+        assertScore(memoryGame, 3, 7);
         assertEquals(0, memoryGame.getBoard().hiddenCount());
     }
 }

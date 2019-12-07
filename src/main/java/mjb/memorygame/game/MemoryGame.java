@@ -39,6 +39,7 @@ public class MemoryGame {
     private boolean lock;
     private boolean successfulTurn;
     private boolean gameOver;
+    private int winner = 0;
     
     public MemoryGame(int pairCount) {
         this(pairCount, 1);
@@ -179,6 +180,12 @@ public class MemoryGame {
         setSuccessfulTurn(false);
         if (getBoard().hiddenCount() == 0) {
             setGameOver(true);
+            if (player1Score > player2Score) {
+                setWinner(1);
+            }
+            else if (player2Score > player1Score) {
+                setWinner(2);
+            }
         }
     }
     
@@ -300,6 +307,14 @@ public class MemoryGame {
 
     public void setGameOver(boolean gameOver) {
         this.gameOver = gameOver;
+    }
+
+    public int getWinner() {
+        return winner;
+    }
+
+    public void setWinner(int winner) {
+        this.winner = winner;
     }
 
 }
