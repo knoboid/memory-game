@@ -92,6 +92,8 @@ class App extends React.Component {
 	}
 
 	gameOver() {
+		console.log("Game over!!");
+		
 		getGame( response => {
 			this.setState({game: response.entity});
 		}, this.state.game.id);
