@@ -69,6 +69,7 @@ class Board extends Component {
         const { game } = this.state;
 		
 		const style = {float: 'left'};
+		const columns = Math.floor(Math.sqrt(game.cardPairCount * 2));
 		
 		return (
 			<div>
@@ -85,7 +86,7 @@ class Board extends Component {
                     {
                         game.board.map((card, i) => {
                             return (
-								<div key={i} style={ (i % 3 === 0) ? {float: 'left', clear: 'left'} : {float: 'left'}}>
+								<div key={i} style={ (i % columns === 0) ? {float: 'left', clear: 'left'} : {float: 'left'}}>
                                     <Card index={i} card={card} onClick={this.cardClicked}/>
                                 </div>
                             )
