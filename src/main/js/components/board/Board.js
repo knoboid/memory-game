@@ -51,10 +51,11 @@ class Board extends Component {
 			}
 			else {
 				const game = response.entity;
+				const delay = game.successfulTurn ? 0 : 2500;
 				if (game.lock) {
 					setTimeout(() => {
 						completeTurn(() => {}, this.props.gameId);
-					}, 2500);
+					}, delay);
 				}
 			} 
         }, gameId, playerId, cardIndex);
@@ -66,7 +67,6 @@ class Board extends Component {
 
 	render() {
         const { game } = this.state;
-		console.log(game);
 		
 		const style = {float: 'left'};
 		

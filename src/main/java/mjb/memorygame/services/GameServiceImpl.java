@@ -58,6 +58,7 @@ public class GameServiceImpl implements GameService {
         game.setLock(memoryGame.getLock());
         game.setScore1(memoryGame.getPlayer1Score());
         game.setScore2(memoryGame.getPlayer2Score());
+        game.setSuccessfulTurn(memoryGame.isSuccessfulTurn());
     }
 
     public int getPlayerNumber(Game game, long playerId) {

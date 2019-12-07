@@ -44,6 +44,9 @@ public class Game {
     @Column
     private boolean lock;
 
+    @Transient
+    private boolean successfulTurn;
+
     public Game() {
         setLock(false);
     }
@@ -146,4 +149,13 @@ public class Game {
     public void setLock(boolean lock) {
         this.lock = lock;
     }
+
+    public boolean isSuccessfulTurn() {
+        return successfulTurn;
+    }
+
+    public void setSuccessfulTurn(boolean successfulTurn) {
+        this.successfulTurn = successfulTurn;
+    }
+
 }
