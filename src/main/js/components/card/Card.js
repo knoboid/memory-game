@@ -14,9 +14,18 @@ class Card extends React.Component {
     }
 
 	render() {
+        const isFaceDown = (this.props.card == 0);
+        const cardStyle = isFaceDown ? 'faceDown' : 'faceUp';
+        const cardText = isFaceDown ? '' : this.props.card;
+        const cardColour = isFaceDown ? '#553000' : '#fff8ce';
+        
 		return (
-            <span className='card'>
-                (<span href='#' onClick={this.handleCardTurn}>{this.props.card}</span>)
+            <span className='container' onClick={this.handleCardTurn}>
+                <svg className='backgroundCircle' height="100" width="100">
+                    <circle cx="45" cy="45" r="40" stroke="black" stroke-width="3" fill={cardColour} />
+                    hello
+                </svg> 
+                <span className={'cardText ' + cardStyle} href='#'>{cardText}</span>
             </span>
 		)
 	}
