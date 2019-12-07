@@ -103,6 +103,10 @@ public class SeekController {
             return new ResponseEntity<>(new RestError(String.format(msg)), HttpStatus.OK);
 		}
 		Player seeker = playerRepository.findById(playerId).get();
+		if (seeker.getId() == playerId) {
+			String msg = "You cannot accept your own seeks.";
+            return new ResponseEntity<>(new RestError(String.format(msg)), HttpStatus.OK);	
+		}
 		seek.setAccepter(seeker);
 		Game game = seek.getGame();
 		MemoryGame memoryGame = new MemoryGame(game.getCardPairCount());
