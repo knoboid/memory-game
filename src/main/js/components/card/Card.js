@@ -22,7 +22,7 @@ class Card extends React.Component {
 		return (
             <span className='container' onClick={this.handleCardTurn}>
                 <svg className='backgroundCircle' height="100" width="100">
-                    <circle cx="45" cy="45" r="40" stroke="black" stroke-width="3" fill={cardColour} />
+                    <circle cx="45" cy="45" r="40" stroke="black" strokeWidth="3" fill={cardColour} />
                     hello
                 </svg> 
                 <span className={'cardText ' + cardStyle} href='#'>{cardText}</span>
