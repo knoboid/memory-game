@@ -11,14 +11,12 @@ class Board extends Component {
 
 	constructor(props) {
 		super(props);
-		this.state = {gate: true};
+        this.state = {game: {board: []}, loaded: false, gameOver: false};
         this.cardClicked = this.cardClicked.bind(this);
-        this.state = {game: {board: []}, loaded: false};
         this.turnCard = this.turnCard.bind(this);
         this.cardClicked = this.cardClicked.bind(this);
 		this.newMove = this.newMove.bind(this);
 		this.quit = this.quit.bind(this);
-		
 	}
 
 	componentDidMount() {        
@@ -26,6 +24,13 @@ class Board extends Component {
 		stompClient.register([
 			{route: '/topic/newMove', callback: this.newMove},
 		]);
+	}
+
+	componentDidUpdate() {
+		if (!this.state.gameOver && this.state.game.gameOver) {			
+			this.props.onGameOver();
+			this.setState({gate: false, gameOver: true});
+		}
 	}
 
 	newMove(response) {
@@ -70,13 +75,8 @@ class Board extends Component {
 
 	render() {
         const { game } = this.state;
-		const columns = Math.floor(Math.sqrt(game.cardPairCount * 2));
+		const columns = Math.floor(Math.sqrt(game.cardPairCount * 2));		
 
-		if (this.state.gate && game.gameOver) {
-			this.props.onGameOver();
-			this.setState({gate: false})
-		}
-		
 		return (
 			<div>
 				{
