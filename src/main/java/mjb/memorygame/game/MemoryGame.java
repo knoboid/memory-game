@@ -37,7 +37,7 @@ public class MemoryGame {
     private int player2Score = 0;
     private List<Integer> moves = new ArrayList<Integer>();
     private boolean lock;
-    private boolean succesfulTurn;
+    private boolean successfulTurn;
     
     public MemoryGame(int pairCount) {
         this(pairCount, 1);
@@ -129,7 +129,7 @@ public class MemoryGame {
                 // int mc = getMoveCount();
                 setLock(true);
                 if (cardsMatch(getMoveCount() - 1)) {
-                    setSuccesfulTurn(true);
+                    setSuccessfulTurn(true);
                 }
             } 
         }
@@ -171,7 +171,7 @@ public class MemoryGame {
     public void completeTurn() {
         checkScore(getMoveCount()-1);
         setLock(false);
-        setSuccesfulTurn(false);
+        setSuccessfulTurn(false);
     }
     
     /************************
@@ -278,12 +278,12 @@ public class MemoryGame {
         this.lock = lock;
     }
 
-    public boolean isSuccesfulTurn() {
-        return succesfulTurn;
+    public boolean isSuccessfulTurn() {
+        return successfulTurn;
     }
 
-    public void setSuccesfulTurn(boolean succesfulTurn) {
-        this.succesfulTurn = succesfulTurn;
+    public void setSuccessfulTurn(boolean successfulTurn) {
+        this.successfulTurn = successfulTurn;
     }
 
 }
