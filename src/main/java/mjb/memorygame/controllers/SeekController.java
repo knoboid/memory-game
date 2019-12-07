@@ -102,17 +102,17 @@ public class SeekController {
 			String msg = "This seek has already been accepted.";
             return new ResponseEntity<>(new RestError(String.format(msg)), HttpStatus.OK);
 		}
-		Player seeker = playerRepository.findById(playerId).get();
-		if (seeker.getId() == playerId) {
+		else if (seek.getSeeker().getId() == playerId) {
 			String msg = "You cannot accept your own seeks.";
             return new ResponseEntity<>(new RestError(String.format(msg)), HttpStatus.OK);	
 		}
-		seek.setAccepter(seeker);
+		Player accepter = playerRepository.findById(playerId).get();
+		seek.setAccepter(accepter);
 		Game game = seek.getGame();
 		MemoryGame memoryGame = new MemoryGame(game.getCardPairCount());
 		Cards cards = new Cards(game.getId(), memoryGame.getCardsAsList());
 		cardsRepository.save(cards);
-		game.setPlayer2(seeker);
+		game.setPlayer2(accepter);
 		game.setBoard(memoryGame.getBoardAsList());
 		seek = seekRepository.save(seek);
 		seeksEventHandler.newAccept(seek);
