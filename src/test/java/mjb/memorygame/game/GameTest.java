@@ -74,7 +74,7 @@ public class GameTest {
         memoryGame.setCards(generateReverseSequencedCards(cardPairCount));
 
         assertEquals(1, memoryGame.getCurrentPlayer());
-
+        assertFalse(memoryGame.isSuccesfulTurn());
         /**
          * MOVE 0 p1
          */
@@ -112,6 +112,7 @@ public class GameTest {
         assertScore(memoryGame, 0, 0);
         cardIndex = 1;
 
+        assertFalse(memoryGame.isSuccesfulTurn());
         /**
          * MOVE 1 p1
          */
@@ -125,13 +126,18 @@ public class GameTest {
         assertEquals(18, memoryGame.getBoard().hiddenCount());
         assertScore(memoryGame, 0, 0);
 
+        // assertFalse(memoryGame.isSuccesfulTurn());
         try {
             memoryGame.revealCard(2, cardIndex);
             assertTrue("expecting MemoryGameLocked", false);
         } catch (MemoryGameLockedException e) {
             // ignore
         }
+        // assertFalse(memoryGame.isSuccesfulTurn());
+        assertTrue(memoryGame.isSuccesfulTurn());
         memoryGame.completeTurn();
+        assertFalse(memoryGame.isSuccesfulTurn());
+
         assertScore(memoryGame, 1, 0);
         assertEquals(1, memoryGame.getCurrentPlayer());
 
@@ -145,7 +151,9 @@ public class GameTest {
         /**
          * MOVE 2 p1
          */
+        assertFalse(memoryGame.isSuccesfulTurn());
         memoryGame.revealCard(1, 2);
+        assertFalse(memoryGame.isSuccesfulTurn());
 
         /**
          * MOVE 3 p1
@@ -153,7 +161,10 @@ public class GameTest {
         memoryGame.revealCard(1, 4);
         assertScore(memoryGame, 1, 0);
         assertEquals(1, memoryGame.getCurrentPlayer());
+        assertFalse(memoryGame.isSuccesfulTurn());
+
         memoryGame.completeTurn();
+        assertFalse(memoryGame.isSuccesfulTurn());
 
         assertScore(memoryGame, 1, 0);
         assertEquals(2, memoryGame.getCurrentPlayer());
@@ -161,9 +172,13 @@ public class GameTest {
         /**
          * MOVES 4 and 5 p2
          */
+        assertFalse(memoryGame.isSuccesfulTurn());
         memoryGame.revealCard(2, 2);
+        assertFalse(memoryGame.isSuccesfulTurn());
         memoryGame.revealCard(2, 3);
+        assertTrue(memoryGame.isSuccesfulTurn());
         memoryGame.completeTurn();
+        assertFalse(memoryGame.isSuccesfulTurn());
         assertScore(memoryGame, 1, 1);
         assertEquals(16, memoryGame.getBoard().hiddenCount());
 
@@ -183,8 +198,11 @@ public class GameTest {
         assertEquals(12, memoryGame.getBoard().hiddenCount());
 
         memoryGame.revealCard(2, 10);
+        assertFalse(memoryGame.isSuccesfulTurn());
         memoryGame.revealCard(2, 11);
+        assertTrue(memoryGame.isSuccesfulTurn());
         memoryGame.completeTurn();
+        assertFalse(memoryGame.isSuccesfulTurn());
         assertScore(memoryGame, 1, 4);
         assertEquals(10, memoryGame.getBoard().hiddenCount());
 
@@ -227,6 +245,27 @@ public class GameTest {
         memoryGame.completeTurn();
         assertScore(memoryGame, 3, 5);
         assertEquals(4, memoryGame.getBoard().hiddenCount());
+
+        memoryGame.revealCard(1, 16);
+        memoryGame.revealCard(1, 6);
+        assertScore(memoryGame, 3, 5);
+        assertFalse(memoryGame.isSuccesfulTurn());
+        memoryGame.completeTurn();
+        assertScore(memoryGame, 3, 5);
+        assertEquals(4, memoryGame.getBoard().hiddenCount());
+
+        assertFalse(memoryGame.isSuccesfulTurn());
+        memoryGame.revealCard(2, 16);
+        assertFalse(memoryGame.isSuccesfulTurn());
+        memoryGame.revealCard(2, 6);
+        assertScore(memoryGame, 3, 5);
+        assertFalse(memoryGame.isSuccesfulTurn());
+        memoryGame.completeTurn();
+        assertFalse(memoryGame.isSuccesfulTurn());
+        assertScore(memoryGame, 3, 5);
+        assertEquals(4, memoryGame.getBoard().hiddenCount());
+
+        assertFalse(memoryGame.isSuccesfulTurn());
 
         memoryGame.revealCard(1, 16);
         memoryGame.revealCard(1, 17);
