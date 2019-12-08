@@ -85,8 +85,9 @@ class App extends React.Component {
 	}
 
 	alert(message) {
+		this.timeout | clearTimeout(this.timeout);
 		this.setState({alertMessage: message});
-		setTimeout(() => {
+		this.timeout = setTimeout(() => {
 			this.setState({alertMessage: ''});
 		}, 2500);
 	}
