@@ -86,8 +86,7 @@ class Board extends Component {
 				{
 					this.state.loaded ? (
 						<div>
-							<h4>Score</h4>
-							<div>{game.player1.name} ({game.score1} - {game.score2}) {game.player2.name}</div>
+							<div>Score : {game.player1.name} ({game.score1} - {game.score2}) {game.player2.name}</div>
 						</div>
 
 					) : ''
