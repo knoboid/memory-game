@@ -46,14 +46,14 @@ class Player extends React.Component {
 	render() {
 		return (
 			<div>
-				<h2>Player</h2>
 				<div>
-					Input your name:
+					Enter your name:
 				</div>
+				<br />
 				<input
 					className="input"
 					type="text"
-					style={{width:'20em'}}
+					style={{width:'15em'}}
 					onKeyDown={this.handleNameSubmit}
 					disabled={false}
 				/>

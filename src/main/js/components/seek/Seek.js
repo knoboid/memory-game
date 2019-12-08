@@ -1,5 +1,7 @@
 const React = require('react');
 
+import './seek.css';
+
 class Seek extends React.Component {
 
 	constructor(props) {

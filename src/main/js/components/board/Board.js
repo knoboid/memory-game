@@ -76,34 +76,39 @@ class Board extends Component {
 	render() {
 
         const { game } = this.state;
-		const columns = Math.floor(Math.sqrt(game.cardPairCount * 2));	
+		const columns = Math.floor(Math.sqrt(game.cardPairCount * 2) +0.5);	
 		const currentPlayer = game.currentPlayer ? game.currentPlayer.name + ' to play...' : '';
 		const gameOver = game.gameOver ? (game.winner === null ? 'A draw' : 'Game Over. ' + game.winner.name + ' wins!') : '';
 		const moveInformation = game.gameOver ? gameOver : currentPlayer;
+		const bottomButtonText = game.gameOver ? 'Leave' : 'Quit';
 		
 		return (
-			<div>
+			<div id='innerBoardContainer'>
 				{
 					this.state.loaded ? (
-						<div>
+						<div id='score'>
 							<div>Score : {game.player1.name} ({game.score1} - {game.score2}) {game.player2.name}</div>
 						</div>
 
 					) : ''
 				}
-				<div>{moveInformation}</div>
-                <div>
-                    {
-                        game.board.map((card, i) => {
-                            return (
-								<div className='cardDiv' key={i} style={ (i % columns === 0) ? {clear: 'left'} : {}}>
-                                    <Card index={i} card={card} onClick={this.cardClicked}/>
-                                </div>
-                            )
-                        })
-					}
+				<div id='moveInformation'>{moveInformation}</div>
+				<div id='outerCardsContainer'>
+					<div id='cardsContainer'>
+						{
+							game.board.map((card, i) => {
+								return (
+									<div className='cardDiv' key={i} style={ (i % columns === 0) ? {clear: 'left'} : {}}>
+										<Card index={i} card={card} onClick={this.cardClicked}/>
+									</div>
+								)
+							})
+						}
+					</div>
 				</div>
-				<button onClick={this.quit} style={{float: 'left', clear: 'left'}}>Quit</button>
+				<div id='quitButtonContainer' style={{float: 'left', clear: 'left'}}>
+					<span id='quitButton' onClick={this.quit}>{bottomButtonText}</span>
+				</div>
 			</div>
 		)
 	}

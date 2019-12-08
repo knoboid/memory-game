@@ -133,7 +133,7 @@ class App extends React.Component {
 				{
 					showSeeksComponent ? (
 						<div>
-							<h4>Welcome {this.state.currentPlayer.name}!</h4>
+							<h2>Welcome {this.state.currentPlayer.name}!</h2>
 							<Seeks 
 								onSeekSubmitted={this.onSeekSubmitted} 
 								onSeekAccepted={this.onSeekAccepted} 
@@ -145,15 +145,13 @@ class App extends React.Component {
 
 				{
 					showGameComponent ? (
-						<div>
-							<Board 
-								gameId={this.state.game.id} 
-								playerId={this.state.currentPlayer.id} 
-								alert={this.alert} 
-								onQuit={this.quitGame}
-								onGameOver={this.gameOver}
-							/>
-						</div>
+						<Board 
+							gameId={this.state.game.id} 
+							playerId={this.state.currentPlayer.id} 
+							alert={this.alert} 
+							onQuit={this.quitGame}
+							onGameOver={this.gameOver}
+						/>
 					) : ''
 				}
 				

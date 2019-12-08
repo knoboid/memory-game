@@ -1,0 +1,12 @@
+#seeksHeading {
+    padding-top: 1.5em;
+    padding-bottom: .4em;
+    font-weight: bold;
+}
+
+.seekItem {
+    padding-top: .1em;
+    font-weight: normal;
+    font-size: 1em;
+
+}

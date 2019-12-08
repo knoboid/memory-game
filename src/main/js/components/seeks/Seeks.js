@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+import './seeks.css';
+
 import Seek from '../seek/Seek.js';
 import { getSeeks, getSeeksBySeekerId } from '../../rest/rest.js';
 import stompClient from '../../websocket.js';
@@ -48,35 +50,42 @@ class Seeks extends Component {
 	}
 
 	render() {
+
+		const thereAreSeeks = this.state.seeks && this.state.seeks.length
+
 		return (
 			<div>
-				Create a new seek with 
-				<input
+				Publish new seek for a <input
 					className="input"
 					type="text"
-					style={{width:'3em'}}
+					style={{width:'2em', textAlign: 'center'}}
 					onKeyDown={this.handleSeekSubmit}
 					defaultValue={5}
 					disabled={false}
-				/> card pairs.
-				<div>
-					Current Seeks:
-                    {
-                        this.state.seeks.map((seek, i) => {
-							const game = seek.game;							
-                            return (
-								<div key={i}>
-									<Seek 
-										name={game.player1.name} 
-										cards={game.cardPairCount} 
-										seekId={seek.id} 
-										onSeekAccepted={this.onSeekAccepted}
-									/>
-                                </div>
-                            )
-                        })
-                    }
-				</div>
+				/> pairs game.
+				
+					{ 
+						thereAreSeeks ? (
+							<div> 
+								<div id='seeksHeading'>Current Seeks:</div>
+									{ this.state.seeks.map((seek, i) => {
+										const game = seek.game;							
+										return (
+											<div class='seekItem' key={i}>
+												<Seek 
+													name={game.player1.name} 
+													cards={game.cardPairCount} 
+													seekId={seek.id} 
+													onSeekAccepted={this.onSeekAccepted}
+												/>
+											</div>
+										)
+									})
+								}
+							</div>
+						) : ''
+					}
+				
 
 			</div>
 		)

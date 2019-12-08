@@ -1,3 +1,43 @@
 .cardDiv {
     float: left;
 }
+
+#score {
+    text-align: center;
+    padding-top: 2em;
+    padding-bottom: 1em;
+}
+
+#moveInformation {
+    text-align: center;
+    padding-bottom: 1.5em;
+    font-size: 1.5em;
+}
+
+#quitButton {
+    font-family: "Courier New", Courier, monospace;
+    color: #fff8ce;
+    font-size: 1.5em;
+    padding: 5px 20px;
+    border: 3px solid #fff8ce;
+    border-radius: 15px;
+}
+
+#outerCardsContainer {
+    float: right;
+    position: relative;
+    left: -50%;
+}
+
+#cardsContainer {
+    position: relative;
+    left: 50%; 
+}
+
+#quitButtonContainer {
+    padding-top: 1em;
+    width: 100%;
+    text-align: center;
+
+}
+
