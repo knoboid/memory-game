@@ -69,7 +69,8 @@ class Seeks extends Component {
 							<div> 
 								<div id='seeksHeading'>Current Seeks:</div>
 									{ this.state.seeks.map((seek, i) => {
-										const game = seek.game;							
+										const game = seek.game;	
+										if (seek.seeker.id === this.props.playerId) return '';						
 										return (
 											<div class='seekItem' key={i}>
 												<Seek 
