@@ -66,7 +66,12 @@ class Seeks extends Component {
 							const game = seek.game;							
                             return (
 								<div key={i}>
-									<Seek name={game.player1.name} cards={game.cardPairCount} seekId={seek.id} onSeekAccepted={this.onSeekAccepted}/>
+									<Seek 
+										name={game.player1.name} 
+										cards={game.cardPairCount} 
+										seekId={seek.id} 
+										onSeekAccepted={this.onSeekAccepted}
+									/>
                                 </div>
                             )
                         })
