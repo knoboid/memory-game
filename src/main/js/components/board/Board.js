@@ -74,9 +74,13 @@ class Board extends Component {
 	}
 
 	render() {
-        const { game } = this.state;
-		const columns = Math.floor(Math.sqrt(game.cardPairCount * 2));		
 
+        const { game } = this.state;
+		const columns = Math.floor(Math.sqrt(game.cardPairCount * 2));	
+		const currentPlayer = game.currentPlayer ? game.currentPlayer.name + ' to play...' : '';
+		const gameOver = game.gameOver ? (game.winner === null ? 'A draw' : 'Game Over. ' + game.winner.name + ' wins!') : '';
+		const moveInformation = game.gameOver ? gameOver : currentPlayer;
+		
 		return (
 			<div>
 				{
@@ -88,6 +92,7 @@ class Board extends Component {
 
 					) : ''
 				}
+				<div>{moveInformation}</div>
                 <div>
                     {
                         game.board.map((card, i) => {

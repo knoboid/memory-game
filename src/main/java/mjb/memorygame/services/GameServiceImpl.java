@@ -65,6 +65,7 @@ public class GameServiceImpl implements GameService {
                 : memoryGame.getWinner() == 1 ? game.getPlayer1() 
                 : game.getPlayer2()
         );
+        game.setCurrentPlayer(memoryGame.getCurrentPlayer() == 1 ? game.getPlayer1() : game.getPlayer2());
     }
 
     public int getPlayerNumber(Game game, long playerId) {

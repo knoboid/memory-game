@@ -53,6 +53,9 @@ public class Game {
     @Transient
     private Player winner;
 
+    @Transient
+    private Player currentPlayer;
+
     public Game() {
         setLock(false);
     }
@@ -178,6 +181,14 @@ public class Game {
 
     public void setWinner(Player winner) {
         this.winner = winner;
+    }
+
+    public Player getCurrentPlayer() {
+        return currentPlayer;
+    }
+
+    public void setCurrentPlayer(Player currentPlayer) {
+        this.currentPlayer = currentPlayer;
     }
 
 }

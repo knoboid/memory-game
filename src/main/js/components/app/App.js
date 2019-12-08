@@ -91,9 +91,7 @@ class App extends React.Component {
 		}, 2500);
 	}
 
-	gameOver() {
-		console.log("Game over!!");
-		
+	gameOver() {		
 		getGame( response => {
 			this.setState({game: response.entity});
 		}, this.state.game.id);
@@ -147,15 +145,6 @@ class App extends React.Component {
 				{
 					showGameComponent ? (
 						<div>
-							{
-								this.state.game.gameOver ? (
-									<div>Game over. {this.state.game.winner.name} is the winner.</div> 
-								)
-								:
-								(
-									<div>Game</div>
-								)
-							}
 							<Board 
 								gameId={this.state.game.id} 
 								playerId={this.state.currentPlayer.id} 
