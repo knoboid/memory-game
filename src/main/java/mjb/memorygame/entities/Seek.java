@@ -1,31 +1,22 @@
 package mjb.memorygame.entities;
 
-import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
 
-/** 
- * This Entity is not necessary.
- * We can use the Game entity to determine seeks.
- */
+// @TODO    Remove this Entity. 
 @Entity
-public class Seek {
+public class Seek extends BaseEntity {
 
-    @Id
-    @GeneratedValue
-    private long id;
-
-    @OneToOne(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+    @OneToOne(fetch=FetchType.EAGER)
     private Player seeker;
 
-    @OneToOne(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+    @OneToOne(fetch=FetchType.EAGER)
     private Player accepter;
 
-    @OneToOne(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+    @OneToOne(cascade=CascadeType.MERGE, fetch=FetchType.EAGER)
     private Game game;    
 
     @Column
@@ -37,14 +28,6 @@ public class Seek {
     public Seek(Player seeker, int cards) {
         setSeeker(seeker);
         setCards(cards);
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public int getCards() {

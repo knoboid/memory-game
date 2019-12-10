@@ -1,4 +1,4 @@
-package mjb.memorygame.entities;
+package mjb.memorygame.controllers;
 
 /**
  * RestError

@@ -2,15 +2,9 @@ package mjb.memorygame.entities;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 
 @Entity
-public class Card {
-
-    @Id
-    @GeneratedValue
-    private long id;
+public class Card extends BaseEntity {
 
     @Column
     private int value;
@@ -19,14 +13,6 @@ public class Card {
 
     public Card(int value) {
         this.value = value;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public int getValue() {

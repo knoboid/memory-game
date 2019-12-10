@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 import mjb.memorygame.entities.Cards;
 import mjb.memorygame.entities.Game;
 import mjb.memorygame.entities.Move;
-import mjb.memorygame.entities.RestError;
 import mjb.memorygame.events.GamesEventHandler;
 import mjb.memorygame.game.MemoryGame;
 import mjb.memorygame.game.exceptions.MemoryGameCardIsFaceUpException;

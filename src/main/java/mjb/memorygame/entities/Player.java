@@ -2,15 +2,9 @@ package mjb.memorygame.entities;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 
 @Entity
-public class Player {
-
-    @Id
-    @GeneratedValue
-    private long id;
+public class Player extends BaseEntity {
 
     @Column(unique=true, length=30, nullable=false)
     private String name;
@@ -19,14 +13,6 @@ public class Player {
 
     public Player(String name) {
         setName(name);
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public String getName() {

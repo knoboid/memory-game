@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import mjb.memorygame.entities.Player;
-import mjb.memorygame.entities.RestError;
 import mjb.memorygame.repositories.PlayerRepository;
 
 @RestController

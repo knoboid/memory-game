@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import mjb.memorygame.entities.Player;
-import mjb.memorygame.entities.RestError;
 import mjb.memorygame.entities.Seek;
 import mjb.memorygame.game.MemoryGame;
 import mjb.memorygame.entities.Cards;
@@ -23,7 +22,6 @@ import mjb.memorygame.repositories.SeekRepository;
 import mjb.memorygame.services.SeekService;
 import mjb.memorygame.repositories.CardsRepository;
 import mjb.memorygame.repositories.GameRepository;
-import mjb.memorygame.events.GamesEventHandler;
 import mjb.memorygame.events.SeeksEventHandler;
 
 @RestController
@@ -46,9 +44,6 @@ public class SeekController {
 
 	@Autowired
 	private SeeksEventHandler seeksEventHandler;
-
-	@Autowired
-	private GamesEventHandler gamesEventHandler;
 	
 	/**
 	 * Usedd to seek a game with other players.
