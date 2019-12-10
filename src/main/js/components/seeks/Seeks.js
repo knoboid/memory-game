@@ -30,7 +30,7 @@ class Seeks extends Component {
 
 	loadSeeks() {
 		getSeeks(response => {
-			this.setState({seeks: response.entity});
+			this.setState({ seeks: response.entity.filter(seek => seek.seeker.id != this.props.playerId) });
 		});
 	}
 
@@ -67,7 +67,6 @@ class Seeks extends Component {
 								<div id='seeksHeading'>Current Seeks:</div>
 									{ this.state.seeks.map((seek, i) => {
 										const game = seek.game;	
-										if (seek.seeker.id === this.props.playerId) return '';						
 										return (
 											<div className='seekItem' key={i}>
 												<Seek 
