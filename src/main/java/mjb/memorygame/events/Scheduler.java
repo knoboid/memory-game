@@ -12,7 +12,7 @@ public class Scheduler {
     @Autowired
     SeekService seekService;
 
-    @Scheduled(cron = " * * * * *")
+    @Scheduled(cron = "0 * * * * *")
     public void removeOldSeeks() {
         seekService.removeOldSeeks();
     }
