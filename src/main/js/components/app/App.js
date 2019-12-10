@@ -1,6 +1,6 @@
 const React = require('react');
 const ReactDOM = require('react-dom');
-import { getSeek, postSeek, postAccept, getGame } from '../../rest/rest.js';
+import { getSeek, postSeek, postAccept, getGame, deleteSeek } from '../../rest/rest.js';
 
 import Player from '../player/Player.js';
 import Seeks from '../seeks/Seeks.js';
@@ -76,6 +76,7 @@ class App extends React.Component {
 			else {
 				const game = response.entity;
 				this.setState({game});
+				deleteSeek(() => {}, id);
 			}
 		}, id, playerId);
 	}
@@ -125,7 +126,9 @@ class App extends React.Component {
 				{
 					showPlayerComponent ? (
 						<div>
-							<Player onCreate={this.onPlayerCreated} />
+							<Player 
+								onCreate={this.onPlayerCreated}
+							/>
 						</div>
 					) : ''
 				}

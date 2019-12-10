@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import './seeks.css';
 
 import Seek from '../seek/Seek.js';
-import { getSeeks, getSeeksBySeekerId } from '../../rest/rest.js';
+import { getSeeks } from '../../rest/rest.js';
 import stompClient from '../../websocket.js';
 
 class Seeks extends Component {
@@ -12,22 +12,19 @@ class Seeks extends Component {
 		super(props);
 		this.state = {seeks: []};
 		this.onSeekAccepted = this.onSeekAccepted.bind(this);
-		this.newSeeks = this.newSeeks.bind(this);
+		this.refreshSeeks = this.refreshSeeks.bind(this);
 		this.handleSeekSubmit = this.handleSeekSubmit.bind(this);
 	}
 
 	componentDidMount() {
 		this.loadSeeks();
 		stompClient.register([
-			{route: '/topic/newSeek', callback: this.newSeeks},
+			{route: '/topic/newSeek', callback: this.refreshSeeks},
+			{route: '/topic/deleteSeek', callback: this.refreshSeeks},
 		]);
 	}
 
-	newSeeks() {
-		getSeeksBySeekerId(response => {
-			const seeks = response.entity;
-		}, this.props.playerId);
-
+	refreshSeeks() {
 		this.loadSeeks();
 	}
 
@@ -72,7 +69,7 @@ class Seeks extends Component {
 										const game = seek.game;	
 										if (seek.seeker.id === this.props.playerId) return '';						
 										return (
-											<div class='seekItem' key={i}>
+											<div className='seekItem' key={i}>
 												<Seek 
 													name={game.player1.name} 
 													cards={game.cardPairCount} 

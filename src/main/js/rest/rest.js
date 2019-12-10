@@ -60,4 +60,10 @@ const getPlayersByName = (cb, name) => {
     });	
 }
 
-export { getSeeks, getSeek, getSeeksBySeekerId, deleteSeeksBySeekerId, postSeek, postAccept, getGame, postMove, completeTurn, getPlayersByName };
+const deleteSeek = (cb, id) => {
+    client({method: 'DELETE', path: '/api/seek', params: {id}}).done((response, error) => {
+        cb(response, error);
+    });	      
+}
+
+export { getSeeks, getSeek, getSeeksBySeekerId, deleteSeeksBySeekerId, postSeek, postAccept, getGame, postMove, completeTurn, getPlayersByName, deleteSeek };
