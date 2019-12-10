@@ -4,6 +4,7 @@ import Card from '../card/Card.js';
 import { getGame, postMove, completeTurn } from '../../rest/rest.js';
 
 import stompClient from '../../websocket.js';
+import imageLoader from '../../img/images.js';
 
 import './board.css';
 
@@ -11,11 +12,12 @@ class Board extends Component {
 
 	constructor(props) {
 		super(props);
-        this.state = {game: {board: []}, loaded: false, gameOver: false};
+        this.state = {game: {board: []}, loaded: false, gameOver: false, showPictureCards: false};
         this.cardClicked = this.cardClicked.bind(this);
         this.turnCard = this.turnCard.bind(this);
         this.cardClicked = this.cardClicked.bind(this);
 		this.newMove = this.newMove.bind(this);
+		this.toggleCardTheme = this.toggleCardTheme.bind(this);
 		this.quit = this.quit.bind(this);
 	}
 
@@ -69,18 +71,23 @@ class Board extends Component {
         }, gameId, playerId, cardIndex);
 	}
 
+	toggleCardTheme() {
+		this.setState({ showPictureCards: !this.state.showPictureCards });
+	}
+
 	quit() {
 		this.props.onQuit();
 	}
 
 	render() {
 
-        const { game } = this.state;
+        const { game, showPictureCards } = this.state;
 		const columns = Math.floor(Math.sqrt(game.cardPairCount * 2) +0.5);	
 		const currentPlayer = game.currentPlayer ? game.currentPlayer.name + ' to play...' : '';
 		const gameOver = game.gameOver ? (game.winner === null ? 'A draw' : 'Game Over. ' + game.winner.name + ' wins!') : '';
 		const moveInformation = game.gameOver ? gameOver : currentPlayer;
 		const bottomButtonText = game.gameOver ? 'Leave' : 'Quit';
+		const cardThemeButtonText = showPictureCards ? 'numbered cards' : ' picture cards';
 		
 		return (
 			<div id='innerBoardContainer'>
@@ -99,12 +106,21 @@ class Board extends Component {
 							game.board.map((card, i) => {
 								return (
 									<div className='cardDiv' key={i} style={ (i % columns === 0) ? {clear: 'left'} : {}}>
-										<Card index={i} card={card} onClick={this.cardClicked}/>
+										<Card 
+											index={i} 
+											card={card} 
+											onClick={this.cardClicked} 
+											image={imageLoader(card)}
+											showPictureCards={showPictureCards}
+										/>
 									</div>
 								)
 							})
 						}
 					</div>
+				</div>
+				<div id='checkBoxContainer' style={{float: 'left', clear: 'left'}}>
+					<span id='cardThemeButton' onClick={this.toggleCardTheme}>{'Show ' + cardThemeButtonText}</span>
 				</div>
 				<div id='quitButtonContainer' style={{float: 'left', clear: 'left'}}>
 					<span id='quitButton' onClick={this.quit}>{bottomButtonText}</span>

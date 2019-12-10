@@ -11,8 +11,8 @@ module.exports = {
         }
     },
     output: {
-        path: __dirname,
-        filename: './src/main/resources/static/built/bundle.js'
+        path: path.join(__dirname, 'src/main/resources/static/build'),
+        filename: 'bundle.js'
     },
     module: {
         rules: [
@@ -27,6 +27,22 @@ module.exports = {
                 }]
             },
             {test: /\.css$/, use: ['style-loader', 'css-loader']},
+            {
+                test: /\.(gif|png|jpe?g|svg|ico)$/i,
+                exclude: /node_modules/,
+                use: [
+                    {
+                        loader: "url-loader",
+                        options: {
+                            limit: 250000,
+                            name: 'images/[hash]-[name].[ext]',
+                            publicPath: 'built',
+                        },
+                    },
+                    
+                ],
+            },
         ]
-    }
+    },
+
 };
