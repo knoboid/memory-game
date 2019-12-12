@@ -51,17 +51,17 @@ public class GameController {
 
         MemoryGame memoryGame = gameService.loadFromStorage(game);
         if (memoryGame == null) {
-            return new ResponseEntity<>(new RestError("Wrong Player"), HttpStatus.OK);
+            return new ResponseEntity<>(new RestError("It is not your turn"), HttpStatus.OK);
         }
 
         try {
             memoryGame.revealCard(player, cardIndex);
         } catch (MemoryGameWrongPlayerException e) {
-            return new ResponseEntity<>(new RestError("Wrong Player"), HttpStatus.OK);
+            return new ResponseEntity<>(new RestError("It is not your turn"), HttpStatus.OK);
         } catch (MemoryGameCardIsFaceUpException e) {
             return new ResponseEntity<>(new RestError("Card is face up"), HttpStatus.OK);
         } catch (MemoryGameLockedException e) {
-            return new ResponseEntity<>(new RestError("The game is locked"), HttpStatus.OK);
+            return new ResponseEntity<>(new RestError("Please wait until the cards are face down"), HttpStatus.OK);
         } catch (MemoryGameCardOutOfRangeException e) {
             return new ResponseEntity<>(new RestError("Card out of range"), HttpStatus.OK);
         }
@@ -81,7 +81,7 @@ public class GameController {
         List<Move> moves = game.getMoves();
         MemoryGame memoryGame = gameService.loadFromStorage(game);
         if (memoryGame == null) {
-            return new ResponseEntity<>(new RestError("Wrong Player"), HttpStatus.OK);            
+            return new ResponseEntity<>(new RestError("It is not your turn"), HttpStatus.OK);            
         }
 
         gameService.populateEntityFromGame(game, memoryGame);
@@ -103,7 +103,7 @@ public class GameController {
         MemoryGame memoryGame = gameService.loadFromStorage(game);
 
         if (memoryGame == null) {
-            return new ResponseEntity<>(new RestError("Wrong Player"), HttpStatus.OK);            
+            return new ResponseEntity<>(new RestError("It is not your turn"), HttpStatus.OK);            
         }
 
         memoryGame.completeTurn();
