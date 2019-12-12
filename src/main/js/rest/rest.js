@@ -65,3 +65,9 @@ export const deleteSeek = (cb, id) => {
         cb(response, error);
     });	      
 }
+
+export const postPlayer = (cb, name) => {
+    client({method: 'POST', path: '/api/player', params: {name}}).done((response , error) => {
+        cb(response, error);
+    });
+}

@@ -1,16 +1,18 @@
-'use strict';
+import SockJS from 'sockjs-client';
+import 'stompjs';
 
-const SockJS = require('sockjs-client');
-require('stompjs');
+class StompClient {
 
-function register(registrations) {
-	const socket = SockJS('/newseeks');
-	const stompClient = Stomp.over(socket);
-	stompClient.connect({}, function(frame) {
-		registrations.forEach(function (registration) {
-			stompClient.subscribe(registration.route, registration.callback);
+	register(registrations) {
+		const socket = SockJS('/newseeks');
+		const stompClient = Stomp.over(socket);
+		stompClient.connect({}, function(frame) {
+			registrations.forEach(function (registration) {
+				stompClient.subscribe(registration.route, registration.callback);
+			});
 		});
-	});
+	}
+
 }
 
-module.exports.register = register;
+export default new StompClient();

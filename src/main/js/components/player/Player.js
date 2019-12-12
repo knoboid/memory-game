@@ -1,9 +1,8 @@
-const React = require('react');
-const client = require('../../client');
+import React, { Component } from 'react';
 
-import { getPlayersByName } from '../../rest/rest.js';
+import { getPlayersByName, postPlayer } from '../../rest/rest.js';
 
-class Player extends React.Component {
+class Player extends Component {
 
 	constructor(props) {
 		super(props);
@@ -11,22 +10,6 @@ class Player extends React.Component {
 		this.handleNameSubmit = this.handleNameSubmit.bind(this);
 	}
 
-	componentDidMount() {
-		this.getPlayers();
-	}
-
-	getPlayers() {
-		client({method: 'GET', path: '/api/players'}).done(response => {
-			this.setState({players: response.entity});
-		});
-	}
-
-	postUser(name) {
-		client({method: 'POST', path: '/api/player', params: {name: name}}).done(response => {
-			this.props.onCreate(Object.assign({}, response.entity));
-		});
-	}
-	
 	handleNameSubmit(e) {
 		if (e.key === "Enter") {
 			const name = e.target.value.trim();
@@ -37,7 +20,9 @@ class Player extends React.Component {
 					this.props.onCreate(players[0]);
 				}
 				else {
-					this.postUser(name);
+					postPlayer((response) => {
+						this.props.onCreate(response.entity);
+					}, name);
 				}
 			}, name);
 		}

@@ -1,5 +1,5 @@
-const React = require('react');
-const ReactDOM = require('react-dom');
+import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import { getSeek, postSeek, postAccept, getGame, deleteSeek } from '../../rest/rest.js';
 
 import Player from '../player/Player.js';
@@ -10,7 +10,7 @@ import stompClient from '../../websocket.js';
 
 import './app.css';
 
-class App extends React.Component {
+class App extends Component {
 
 	constructor(props) {
 		super(props);

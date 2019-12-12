@@ -1,8 +1,8 @@
-const React = require('react');
+import React, { Component } from 'react';
 
 import './seek.css';
 
-class Seek extends React.Component {
+class Seek extends Component {
 
 	constructor(props) {
         super(props);
