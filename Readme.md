@@ -51,7 +51,7 @@ Ensure that Java, Maven, npm and node are available on your system.
 
 ### Demonstration
 
-A game played out in side-by-side browsers!
+A game played out in side-by-side browsers.
 
 ![Demonstation game](./memory-game-demo.gif)
 
