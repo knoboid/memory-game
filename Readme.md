@@ -49,6 +49,10 @@ Ensure that Java, Maven, npm and node are available on your system.
 
 7. Player against others!
 
+### Demonstration
+
+![Demonstation game](./memory-game-demo.gif)
+
 ### UI
 
 The web front-end is just a free-floating ReactJS application running in the browser. User actions are relayed to the application using a REST API.
