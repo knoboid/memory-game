@@ -57,7 +57,7 @@ public class GameTest {
             MemoryGameCardOutOfRangeException {
         int cardPairCount = 10;
         
-        /***
+        /**
          * Initialize the game.
          */
         MemoryGame memoryGame = new MemoryGame(cardPairCount);
@@ -70,7 +70,9 @@ public class GameTest {
             isListInSequence(memoryGame.getCards().asList())
         );
         assertTrue("Each card appears twice", eachCardAppearsTwice(memoryGame.getCards().asList()));
-        // Put the cards in a known order so that we can play a game.
+        /**
+         * Put the cards in a known order so that we can play a game.
+         */
         memoryGame.setCards(generateReverseSequencedCards(cardPairCount));
 
         assertEquals(1, memoryGame.getCurrentPlayer());
@@ -79,7 +81,10 @@ public class GameTest {
         /**
          * MOVE 0 p1
          */
-        // Make invalid move.
+        
+        /**
+         * Make invalid move by attempting to turn a card with an invalid index.
+         */
         try {
             memoryGame.revealCard(1, cardPairCount*2);
             assertTrue("expecting MemoryGameCardOutOfRangeException", false);
@@ -88,7 +93,11 @@ public class GameTest {
         }
         assertEquals(1, memoryGame.getCurrentPlayer());
         assertEquals(0, memoryGame.getMoveCount());
-        // Make another invalid move.
+
+
+        /**
+         * Make invalid move by attempting to turn another card with an invalid index.
+         */
         try {
             memoryGame.revealCard(1, -1);
             assertTrue("expecting MemoryGameCardOutOfRangeException", false);
@@ -96,12 +105,17 @@ public class GameTest {
             // ignore
         }
         int cardIndex = 0;
-        // Make a valid move!
+        /**
+         * Make a valid move!
+         */
         assertTrue(0 == memoryGame.getBoard().get(cardIndex));
         memoryGame.revealCard(1, cardIndex);
         assertEquals(1, memoryGame.getCurrentPlayer());
         assertEquals(1, memoryGame.getMoveCount());
-        // Make invalid move.
+        /**
+         * Make invalid move by attempting to turn over a card 
+         * that is already face up.
+         */
         try {
             memoryGame.revealCard(1, cardIndex);
             assertTrue("expecting MemoryGameCardIsFaceUpException", false);
@@ -119,11 +133,12 @@ public class GameTest {
          */
         memoryGame.revealCard(1, cardIndex);
 
-        // System.out.println(memoryGame.getBoard());
         assertEquals(1, memoryGame.getCurrentPlayer());
         assertEquals(2, memoryGame.getMoveCount());
         
-        //// Test score and game board!
+        /**
+         * Test that the score and the number of face down cards are as expected.
+         */
         assertEquals(18, memoryGame.getBoard().hiddenCount());
         assertScore(memoryGame, 0, 0);
 
@@ -210,13 +225,14 @@ public class GameTest {
         memoryGame.revealCard(2, 4);
         
         /**
-         * Create new game using the cards and the moves from the current game.
+         * Recreate a new game using the cards and the moves from the current game.
          */
         MemoryGame memoryGame2 = 
             new MemoryGame(memoryGame.getCardsAsList(), memoryGame.getMovesAsList(), memoryGame.getLock());
         
         /**
-         * Check that the boards are the same size, and that they contain the sasme items.
+         * Check that the boards from these two game instances are the same size, 
+         *  and that they contain the same items.
          */
         assertEquals(memoryGame.getBoard().getSize(), memoryGame2.getBoard().getSize());
         for(int i=0; i<memoryGame.getBoard().getSize(); i++) {
