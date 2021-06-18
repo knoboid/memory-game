@@ -32,8 +32,16 @@ class App extends Component {
 		]);
 	}
 
+	isUserPlayingAGame() {
+		return this.state.game !== null;
+	}
+
+	isUserLoggedIn() {
+		return this.state.currentPlayer !== null;
+	}
+
 	acceptedSeek(response) {
-		if (this.state.game === null && this.state.currentPlayer !== null) {
+		if (!this.isUserPlayingAGame() && this.isUserLoggedIn()) {
 			const seekId = parseInt(response.body, 10);
 			getSeek(response => {
 				let seek = response.entity;
@@ -108,10 +116,10 @@ class App extends Component {
 		let showPlayerComponent = false;
 		let showSeeksComponent = false;
 		let showGameComponent = false;
-		if (this.state.currentPlayer === null) {
+		if (!this.isUserLoggedIn()) {
 			showPlayerComponent = true;
 		}
-		else if (this.state.game === null) {
+		else if (!this.isUserPlayingAGame()) {
 			showSeeksComponent = true;
 		}
 		else {
