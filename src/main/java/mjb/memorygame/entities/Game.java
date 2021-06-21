@@ -54,10 +54,14 @@ public class Game extends BaseEntity {
         setLock(false);
     }
 
+    public Game(Player player1, Player player2, int cardCount) {
+        this(player1, cardCount);
+        setPlayer2(player2);
+    }
+
     public Game(Player player1, int cardCount) {
         this(player1);
         setCardPairCount(cardCount);
-
     }
 
     public Game(Player player1) {

@@ -7,18 +7,23 @@ import org.springframework.stereotype.Service;
 
 import mjb.memorygame.entities.Cards;
 import mjb.memorygame.entities.Game;
+import mjb.memorygame.entities.Player;
 import mjb.memorygame.game.MemoryGame;
 import mjb.memorygame.game.exceptions.MemoryGameCardIsFaceUpException;
 import mjb.memorygame.game.exceptions.MemoryGameCardOutOfRangeException;
 import mjb.memorygame.game.exceptions.MemoryGameLockedException;
 import mjb.memorygame.game.exceptions.MemoryGameWrongPlayerException;
 import mjb.memorygame.repositories.CardsRepository;
+import mjb.memorygame.repositories.GameRepository;
 
 @Service
 public class GameService {
 
     @Autowired
     private CardsRepository cardsRepository;
+
+    @Autowired
+    private GameRepository gameRepository;
     
     public MemoryGame loadFromStorage(Game game) {
         List<Integer> moves = game.asList();
@@ -75,6 +80,33 @@ public class GameService {
             return 2;
         }
         return 0;
+    }
+
+    /**
+     * Gets the game that a player is involved in.
+     * @param playerId
+     * @return the game the player is currently involved in, otherwise null.
+     */
+    public Game getPlayersGame(long playerId) {
+        List<Game> games = gameRepository.findAll();
+        for(Game game : games) {
+            if (game.getPlayer1().getId() == playerId) {
+                return game;
+            }
+            else if (game.getPlayer2().getId() == playerId) {
+                return game;
+            }
+        }
+        return null;
+    }
+
+    public Game newGame(Player player1, Player player2, int cardCount) {
+        Game game = gameRepository.save((new Game(player1, player2, cardCount)));
+		MemoryGame memoryGame = new MemoryGame(cardCount);
+		Cards cards = new Cards(game.getId(), memoryGame.getCardsAsList());
+		cardsRepository.save(cards);
+		game.setBoard(memoryGame.getBoardAsList());
+        return game;
     }
 
 }
