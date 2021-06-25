@@ -33,15 +33,17 @@ class App extends Component {
 	}
 
 	playerHasSeekAccepted(response) {
-		if (!this.isUserPlayingAGame() && this.isUserLoggedIn()) {
-			const seekId = parseInt(response.body, 10);
-			getSeek(response => {
-				let seek = response.entity;
-				if (seek.seeker.id === this.state.currentPlayer.id) {
+		if (this.isUserLoggedIn()) {
+			let seek = JSON.parse(response.body);
+			if (seek.seeker.id === this.state.currentPlayer.id) {
+				if (!this.isUserPlayingAGame()) {
 					this.setState({game: seek.game});
 					deleteSeek(() => {}, seek.id);
 				}
-			}, seekId);
+				else {
+					// do something if user is playing a game.
+				}
+			}
 		}
 	}
 
