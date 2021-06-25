@@ -22,7 +22,7 @@ public class SeeksEventHandler {
             WebSocketConfiguration.MESSAGE_PREFIX + "/newSeek", getPath(seek));
     }
 
-	public void newAccept(Seek seek) {
+	public void seekAccepted(Seek seek) {
 		this.websocket.convertAndSend(
             WebSocketConfiguration.MESSAGE_PREFIX + "/newAccept", getPath(seek));
 	}

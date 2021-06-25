@@ -19,8 +19,6 @@ import mjb.memorygame.repositories.PlayerRepository;
 import mjb.memorygame.repositories.SeekRepository;
 import mjb.memorygame.services.GameService;
 import mjb.memorygame.services.SeekService;
-import mjb.memorygame.repositories.CardsRepository;
-import mjb.memorygame.repositories.GameRepository;
 import mjb.memorygame.events.SeeksEventHandler;
 
 @RestController
@@ -121,7 +119,7 @@ public class SeekController {
 		seek.setGame(game);
 		seek.setAccepter(accepter);
 		seek = seekRepository.save(seek);
-		seeksEventHandler.newAccept(seek);
+		seeksEventHandler.seekAccepted(seek);
 		return new ResponseEntity<>(game, HttpStatus.OK);
 	}
 
