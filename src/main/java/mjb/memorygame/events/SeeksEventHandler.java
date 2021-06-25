@@ -24,7 +24,7 @@ public class SeeksEventHandler {
 
 	public void seekAccepted(Seek seek) {
 		this.websocket.convertAndSend(
-            WebSocketConfiguration.MESSAGE_PREFIX + "/newAccept", getPath(seek));
+            WebSocketConfiguration.MESSAGE_PREFIX + "/seekAccepted", getPath(seek));
 	}
 
 	public void deleteSeek(Long seekId) {

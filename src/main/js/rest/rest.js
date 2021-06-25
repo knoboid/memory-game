@@ -30,7 +30,7 @@ export const postSeek = (cb, playerId, cardPairCount) => {
     });
 };
 
-export const postAccept = (cb, seekId, playerId) => {
+export const postSeekAccept = (cb, seekId, playerId) => {
     client({method: 'POST', path: '/api/accept', params: {seekId, playerId}}).done((response, error) => {
         cb(response, error);
     });
@@ -70,4 +70,10 @@ export const postPlayer = (cb, name) => {
     client({method: 'POST', path: '/api/player', params: {name}}).done((response , error) => {
         cb(response, error);
     });
+};
+
+export const deleteGame = (cb, id) => {
+    client({method: 'DELETE', path: '/api/game', params: {id, playerId}}).done((response, error) => {
+        cb(response, error);
+    });	      
 };

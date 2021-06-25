@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import { getSeek, postSeek, postAccept, getGame, deleteSeek } from '../../rest/rest.js';
+import { getSeek, postSeek, postSeekAccept, getGame, deleteSeek, deleteGame } from '../../rest/rest.js';
 
 import Player from '../player/Player.js';
 import Seeks from '../seeks/Seeks.js';
@@ -20,7 +20,7 @@ class App extends Component {
 		this.onGameCreated = this.onGameCreated.bind(this);
 		this.onSeekAccepted = this.onSeekAccepted.bind(this);
 		this.onSeekSubmitted = this.onSeekSubmitted.bind(this);
-		this.acceptedSeek = this.acceptedSeek.bind(this);
+		this.playerHasSeekAccepted = this.playerHasSeekAccepted.bind(this);
 		this.quitGame = this.quitGame.bind(this);
 		this.gameOver = this.gameOver.bind(this);
 		this.alert = this.alert.bind(this);
@@ -28,8 +28,21 @@ class App extends Component {
 
 	componentDidMount() {
 		stompClient.register([
-			{route: '/topic/newAccept', callback: this.acceptedSeek},
+			{route: '/topic/seekAccepted', callback: this.playerHasSeekAccepted},
 		]);
+	}
+
+	playerHasSeekAccepted(response) {
+		if (!this.isUserPlayingAGame() && this.isUserLoggedIn()) {
+			const seekId = parseInt(response.body, 10);
+			getSeek(response => {
+				let seek = response.entity;
+				if (seek.seeker.id === this.state.currentPlayer.id) {
+					this.setState({game: seek.game});
+					deleteSeek(() => {}, seek.id);
+				}
+			}, seekId);
+		}
 	}
 
 	isUserPlayingAGame() {
@@ -40,17 +53,20 @@ class App extends Component {
 		return this.state.currentPlayer !== null;
 	}
 
-	acceptedSeek(response) {
-		if (!this.isUserPlayingAGame() && this.isUserLoggedIn()) {
-			const seekId = parseInt(response.body, 10);
-			getSeek(response => {
-				let seek = response.entity;
-				if (seek.seeker.id === this.state.currentPlayer.id) {
-					this.setState({game: seek.game});
-				}
-			}, seekId);
-		}
+	onSeekAccepted(seekId) {
+		this.playerAcceptsSeek(this.state.currentPlayer.id, seekId);
+	}
 
+	playerAcceptsSeek(playerId, seekId) {
+		postSeekAccept(response => {
+			if (response.entity.error) {
+				this.alert(response.entity.error);
+			}
+			else {
+				const game = response.entity;
+				this.setState({game});
+			}
+		}, seekId, playerId);
 	}
 
 	onPlayerCreated(currentPlayer) {
@@ -63,10 +79,6 @@ class App extends Component {
 		this.submitSeek(value);
 	}
 
-	onSeekAccepted(seekId) {
-		this.acceptSeek(this.state.currentPlayer.id, seekId);
-	}
-
 	submitSeek(cardPairCount) {
 		let playerId = this.state.currentPlayer.id;
 		postSeek(response => {
@@ -74,19 +86,6 @@ class App extends Component {
 				this.alert(response.entity.error);
 			}
 		}, playerId, cardPairCount);
-	}
-
-	acceptSeek(playerId, id) {
-		postAccept(response => {
-			if (response.entity.error) {
-				this.alert(response.entity.error);
-			}
-			else {
-				const game = response.entity;
-				this.setState({game});
-				deleteSeek(() => {}, id);
-			}
-		}, id, playerId);
 	}
 
 	onGameCreated(game) {
@@ -108,6 +107,7 @@ class App extends Component {
 	}
 
 	quitGame() {
+		// Quit !!!
 		this.setState({game: null});
 	}
 
