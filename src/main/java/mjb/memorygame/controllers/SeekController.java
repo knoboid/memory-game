@@ -24,6 +24,8 @@ import mjb.memorygame.events.SeeksEventHandler;
 @RestController
 public class SeekController {
 
+	private final Object seekAcceptedLock = new Object();
+
 	@Autowired
     private SeekRepository seekRepository;
 
@@ -94,33 +96,35 @@ public class SeekController {
 		Seek seek = seekRepository.findById(seekId).get();
 		Player seeker = seek.getSeeker();
 		long seekerId = seeker.getId();
-		if (seekService.isSeekAccepted(seek)) {
-			String msg = "This seek has already been accepted.";
-            return new ResponseEntity<>(new RestError(String.format(msg)), HttpStatus.OK);
-		}
-		else if (seekerId == playerId) {
-			String msg = "You cannot accept your own seeks.";
-            return new ResponseEntity<>(new RestError(String.format(msg)), HttpStatus.OK);	
-		}
-		else {
-			boolean accepterIsInAGame = gameService.getPlayersGame(playerId) != null;
-			if (accepterIsInAGame) {
-				String msg = "You are already in a game.";
+		synchronized(this.seekAcceptedLock) {
+			if (seekService.isSeekAccepted(seek)) {
+				String msg = "This seek has already been accepted.";
 				return new ResponseEntity<>(new RestError(String.format(msg)), HttpStatus.OK);
 			}
-			boolean seekerIsInAGame = gameService.getPlayersGame(seekerId) != null;
-			if (seekerIsInAGame) {
-				String msg = "That player is already in a game.";
-				return new ResponseEntity<>(new RestError(String.format(msg)), HttpStatus.OK);
+			else if (seekerId == playerId) {
+				String msg = "You cannot accept your own seeks.";
+				return new ResponseEntity<>(new RestError(String.format(msg)), HttpStatus.OK);	
 			}
+			else {
+				boolean accepterIsInAGame = gameService.getPlayersGame(playerId) != null;
+				if (accepterIsInAGame) {
+					String msg = "You are already in a game.";
+					return new ResponseEntity<>(new RestError(String.format(msg)), HttpStatus.OK);
+				}
+				boolean seekerIsInAGame = gameService.getPlayersGame(seekerId) != null;
+				if (seekerIsInAGame) {
+					String msg = "That player is already in a game.";
+					return new ResponseEntity<>(new RestError(String.format(msg)), HttpStatus.OK);
+				}
+			}
+			Player accepter = playerRepository.findById(playerId).get();
+			Game game = gameService.newGame(seeker, accepter, seek.getCards());
+			seek.setGame(game);
+			seek.setAccepter(accepter);
+			seek = seekRepository.save(seek);
+			seeksEventHandler.seekAccepted(seek);
+			return new ResponseEntity<>(game, HttpStatus.OK);
 		}
-		Player accepter = playerRepository.findById(playerId).get();
-		Game game = gameService.newGame(seeker, accepter, seek.getCards());
-		seek.setGame(game);
-		seek.setAccepter(accepter);
-		seek = seekRepository.save(seek);
-		seeksEventHandler.seekAccepted(seek);
-		return new ResponseEntity<>(game, HttpStatus.OK);
 	}
 
 }
