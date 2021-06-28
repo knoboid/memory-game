@@ -92,7 +92,7 @@ public class SeekController {
 
     @RequestMapping(value = "/api/accept", method = RequestMethod.POST)
 	@ResponseBody
-	ResponseEntity<?> postAddAccept(@RequestParam Long seekId, @RequestParam Long playerId) {
+	ResponseEntity<?> postAcceptSeek(@RequestParam Long seekId, @RequestParam Long playerId) {
 		Seek seek = seekRepository.findById(seekId).get();
 		Player seeker = seek.getSeeker();
 		long seekerId = seeker.getId();
