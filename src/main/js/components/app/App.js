@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import { getSeek, postSeek, postSeekAccept, getGame, deleteSeek, deleteGame } from '../../rest/rest.js';
+import { postSeek, postSeekAccept, getGame, deleteSeek, } from '../../rest/rest.js';
 
 import Player from '../player/Player.js';
 import Seeks from '../seeks/Seeks.js';

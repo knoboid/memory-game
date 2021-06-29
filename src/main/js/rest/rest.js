@@ -6,12 +6,6 @@ export const getSeeks = (cb) => {
     });	
 };
 
-export const getSeek = (cb, id) => {
-    client({method: 'GET', path: '/api/seek', params: {id}}).done((response, error) => {
-        cb(response, error);
-    });	
-};
-
 export const getSeeksBySeekerId = (cb, seekerId) => {
     client({method: 'GET', path: '/api/seeksbyseekerid', params: {seekerId}}).done((response, error) => {
         cb(response, error);
@@ -70,10 +64,4 @@ export const postPlayer = (cb, name) => {
     client({method: 'POST', path: '/api/player', params: {name}}).done((response , error) => {
         cb(response, error);
     });
-};
-
-export const deleteGame = (cb, id) => {
-    client({method: 'DELETE', path: '/api/game', params: {id, playerId}}).done((response, error) => {
-        cb(response, error);
-    });	      
 };

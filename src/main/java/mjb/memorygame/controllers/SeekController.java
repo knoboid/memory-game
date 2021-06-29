@@ -65,12 +65,6 @@ public class SeekController {
 		return new ResponseEntity<>(seeks, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/api/seek", method = RequestMethod.GET)
-	ResponseEntity<?> getViewSeek(@RequestParam Long id) {
-		Seek seek = seekRepository.findById(id).get();
-		return new ResponseEntity<>(seek, HttpStatus.OK);
-	}
-
 	@RequestMapping(value = "/api/seek", method = RequestMethod.DELETE)
 	ResponseEntity<?> deleteSeek(@RequestParam Long id) {
 		seekRepository.deleteById(id);
