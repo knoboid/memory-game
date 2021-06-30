@@ -115,4 +115,13 @@ public class GameController {
         return new ResponseEntity<>(game, HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/api/quitgame", method = RequestMethod.PUT)
+    ResponseEntity<?> postQuit(@RequestParam long gameId, @RequestParam long playerId) {
+        boolean success = gameService.leaveGame(gameId, playerId);
+        if (!success) {
+            return new ResponseEntity<>(new RestError("Could not remove player from that game"), HttpStatus.OK);            
+        }
+        return new ResponseEntity<>(null, HttpStatus.OK);
+    }
+
 }

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import { postSeek, postSeekAccept, getGame, deleteSeek, } from '../../rest/rest.js';
+import { postSeek, postSeekAccept, getGame, deleteSeek, putQuit } from '../../rest/rest.js';
 
 import Player from '../player/Player.js';
 import Seeks from '../seeks/Seeks.js';
@@ -109,8 +109,16 @@ class App extends Component {
 	}
 
 	quitGame() {
-		// Quit !!!
-		this.setState({game: null});
+		let gameId = this.state.game.id;
+		let playerId = this.state.currentPlayer.id;
+		putQuit(response => {
+			if (response.entity.error) {
+				this.alert(response.entity.error);
+			}
+			else {
+				this.setState({game: null});
+			}
+		}, gameId, playerId);
 	}
 
 	render() {

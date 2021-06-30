@@ -90,10 +90,12 @@ public class GameService {
     public Game getPlayersGame(long playerId) {
         List<Game> games = gameRepository.findAll();
         for(Game game : games) {
-            if (game.getPlayer1().getId() == playerId) {
+            if (game.getPlayer1().getId() == playerId 
+                    && game.isPlayer1StillPlaying()) {
                 return game;
             }
-            else if (game.getPlayer2().getId() == playerId) {
+            else if (game.getPlayer2().getId() == playerId 
+                    && game.isPlayer2StillPlaying()) {
                 return game;
             }
         }
@@ -107,6 +109,28 @@ public class GameService {
 		cardsRepository.save(cards);
 		game.setBoard(memoryGame.getBoardAsList());
         return game;
+    }
+
+    public boolean leaveGame(long gameId, long playerId) {
+        Game game = this.getPlayersGame(playerId);
+        if (game == null) {
+            return false;
+        }
+        int playerNumber = this.getPlayerNumber(game, playerId);
+        switch (playerNumber) {
+            case 1:
+                game.setPlayer1StillPlaying(false);;
+                break;
+
+            case 2:
+                game.setPlayer2StillPlaying(false);;
+                break;
+
+            default:
+                return false;
+        }
+        gameRepository.save(game);
+        return true;
     }
 
 }

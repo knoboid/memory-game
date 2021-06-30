@@ -65,3 +65,9 @@ export const postPlayer = (cb, name) => {
         cb(response, error);
     });
 };
+
+export const putQuit = (cb, gameId, playerId) => {
+    client({method: 'PUT', path: '/api/quitgame', params: {gameId, playerId}}).done((response , error) => {
+        cb(response, error);
+    });
+};

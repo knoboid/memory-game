@@ -21,6 +21,12 @@ public class Game extends BaseEntity {
     private Player player2;
 
     @Column
+    private boolean isPlayer1StillPlaying;
+
+    @Column
+    private boolean isPlayer2StillPlaying;
+
+    @Column
     private int cardPairCount;
 
     @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
@@ -52,6 +58,8 @@ public class Game extends BaseEntity {
 
     public Game() {
         setLock(false);
+        setPlayer1StillPlaying(true);
+        setPlayer2StillPlaying(true);
     }
 
     public Game(Player player1, Player player2, int cardCount) {
@@ -91,6 +99,22 @@ public class Game extends BaseEntity {
 
     public void setPlayer2(Player player2) {
         this.player2 = player2;
+    }
+
+    public boolean isPlayer1StillPlaying() {
+        return isPlayer1StillPlaying;
+    }
+
+    public void setPlayer1StillPlaying(boolean isPlayer1StillPlaying) {
+        this.isPlayer1StillPlaying = isPlayer1StillPlaying;
+    }
+
+    public boolean isPlayer2StillPlaying() {
+        return isPlayer2StillPlaying;
+    }
+
+    public void setPlayer2StillPlaying(boolean isPlayer2StillPlaying) {
+        this.isPlayer2StillPlaying = isPlayer2StillPlaying;
     }
 
     public List<Move> getMoves() {
